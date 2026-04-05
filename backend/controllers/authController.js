@@ -2,6 +2,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import userModel from "../models/userModel.js";
 import { sendVerificationOtp, generateOTP } from "../config/sendEmail.js";
+import axios from "axios";
 
 const generateToken = (userId) => {
   return jwt.sign({ id: userId }, process.env.JWT_SECRET_KEY, {
@@ -208,10 +209,23 @@ export const sendResetPasswordOtp = async (req, res) => {
     await user.save();
 
     try {
-      await sendVerificationOtp(
-        email,
-        "Password Reset Otp",
-        `Your verification OTP is ${otp}. Verify your account using this Otp. It will expire in ${EXPIRY_MINUTES} minutes.`,
+      await axios.post(
+        "https://api.brevo.com/v3/smtp/email",
+        {
+          sender: {
+            name: "Budget Buddy",
+            email: process.env.SMTP_USER, // must be verified in Brevo
+          },
+          to: [{ email }],
+          subject: "Password Reset OTP",
+          textContent: `Your verification OTP is ${otp}. It will expire in ${EXPIRY_MINUTES} minutes.`,
+        },
+        {
+          headers: {
+            "api-key": process.env.BREVO_API_KEY,
+            "Content-Type": "application/json",
+          },
+        },
       );
       console.log("Email sent successfully");
     } catch (error) {
