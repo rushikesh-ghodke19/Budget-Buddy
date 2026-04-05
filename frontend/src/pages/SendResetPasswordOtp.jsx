@@ -33,6 +33,7 @@ const SendResetPasswordOtp = () => {
       `${BASE_URL}${API_PATHS.AUTH.SENDRESETPASSWORDOTP}`,
       { email },
     );
+    console.log("Response: ", data);
     console.log("step 3");
     if (error) {
       showError("SignUp Failed", error?.message || "Something went wrong.");
