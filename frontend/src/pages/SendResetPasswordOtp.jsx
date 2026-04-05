@@ -15,9 +15,10 @@ const SendResetPasswordOtp = () => {
   const { callApi, loading } = useApi();
   const { showInfo, showWarning, showSuccess, showError } = useToast();
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleSendResetPasswordOtp = async () => {
+    console.log("step 1");
     if (!email) {
       showInfo(
         "Email Missing",
@@ -26,31 +27,31 @@ const SendResetPasswordOtp = () => {
       inputRef.current.focus();
       return false;
     }
-
+    console.log("step 2");
     const { data, error } = await callApi(
       "post",
       `${BASE_URL}${API_PATHS.AUTH.SENDRESETPASSWORDOTP}`,
       { email },
     );
-
+    console.log("step 3");
     if (error) {
       showError("SignUp Failed", error?.message || "Something went wrong.");
       console.error("ERROR:", error);
       return;
     }
-
+    console.log("step 4");
     if (!data) return;
-
+    console.log("step 5");
     if (!data.success) {
       showWarning("Warning", data.message);
       return;
     }
-
+    console.log("step 6");
     showSuccess("Otp Sent", "OTP sent to your email.");
-
+    console.log("step 7");
     localStorage.setItem("userId", data.userData._id);
     localStorage.setItem("otpExpireAt", data.userData.verifyOtpExpireAt);
-
+    console.log("step 8");
     setTimeout(() => {
       navigate(
         `/auth/otp-verification?purpose=send-resetpassword-otp&email=${data?.userData.email}`,
