@@ -1,0 +1,81 @@
+@import "tailwindcss";
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
+
+* {
+  box-sizing: border-box;
+  font-family: "Montserrat", sans-serif;
+  text-decoration: none;
+  list-style: none;
+  outline: none;
+}
+
+::-webkit-scrollbar {
+  appearance: none;
+  width: 4px;
+  height: 4px;
+  background-color: #ddd;
+  border-radius: 50px;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 50px;
+}
+
+input[type="radio"] {
+  -webkit-appearance: none;
+}
+
+html {
+  font-size: 62.5%;
+  scroll-behavior: smooth;
+}
+
+@keyframes toastIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes toastOut {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+.animate-toast-in {
+  animation: toastIn 0.4s ease-in-out forwards;
+}
+
+.animate-toast-out {
+  animation: toastOut 0.4s ease-in-out forwards;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+@theme {
+  --color-budget-buddy-50: #e9f6ff;
+  --color-budget-buddy-100: #cee9ff;
+  --color-budget-buddy-200: #a7daff;
+  --color-budget-buddy-300: #6bc4ff;
+  --color-budget-buddy-400: #26a4ff;
+  --color-budget-buddy-500: #0082ff;
+  --color-budget-buddy-600: #0071ff;
+  --color-budget-buddy-700: #0064ff;
+  --color-budget-buddy-800: #0054e6;
+  --color-budget-buddy-900: #0046b3;
+  --color-budget-buddy-950: #000d24;
+}
