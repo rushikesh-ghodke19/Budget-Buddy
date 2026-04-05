@@ -4,6 +4,7 @@ import { Data } from "../context/DataProvider";
 import KPICard from "../components/KPICard";
 import ExpensesTable from "../components/ExpensesTable";
 import { API_PATHS, BASE_URL } from "../utils/apiPaths";
+import Loading from "../components/Loading";
 
 const Home = () => {
   const { user } = useContext(Data);
@@ -16,7 +17,7 @@ const Home = () => {
 
   const hour = new Date().getHours();
 
-  const { callApi } = useApi();
+  const { callApi, loading } = useApi();
 
   const handleGetStats = async () => {
     const { data, error } = await callApi(
@@ -73,9 +74,17 @@ const Home = () => {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mt-6">
-        <KPICard title="Total Expenses" value={totalExpenses} />
-        <KPICard title="This Month" value={thisMonthExpenses} />
-        <KPICard title="Today" value={todayExpenses} />
+        <KPICard
+          title="Total Expenses"
+          value={totalExpenses}
+          loading={loading}
+        />
+        <KPICard
+          title="This Month"
+          value={thisMonthExpenses}
+          loading={loading}
+        />
+        <KPICard title="Today" value={todayExpenses} loading={loading} />
       </div>
 
       {/* Recent Expenses */}
@@ -83,7 +92,11 @@ const Home = () => {
         Recent Expenses
       </h2>
       <div className="mt-8 bg-white rounded-xl border border-gray-200 shadow-sm">
-        {!recentExpenses ? (
+        {loading ? (
+          <div className="w-full mt-6 flex flex-col items-center justify-center border border-gray-300 rounded-2xl bg-white py-16 px-6 text-center">
+            <Loading w="w-14" h="h-14" />
+          </div>
+        ) : !recentExpenses ? (
           <p className="text-gray-500 text-sm">No recent expenses</p>
         ) : (
           <div className="relative w-full">

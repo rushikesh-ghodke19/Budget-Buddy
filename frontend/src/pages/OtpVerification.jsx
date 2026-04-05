@@ -4,6 +4,7 @@ import useToast from "../hooks/useToast";
 import useApi from "../hooks/useApi";
 import { Data } from "../context/DataProvider";
 import { API_PATHS, BASE_URL } from "../utils/apiPaths";
+import Loading from "../components/Loading";
 
 const OtpVerification = () => {
   const { user, setIsUserLoggedIn } = useContext(Data);
@@ -29,7 +30,7 @@ const OtpVerification = () => {
   const email = query.get("email");
 
   const { showError, showInfo, showSuccess, showWarning } = useToast();
-  const { callApi } = useApi();
+  const { callApi, loading } = useApi();
 
   const formatTime = (timeInSeconds) => {
     if (!timeInSeconds || timeInSeconds < 0) {
@@ -226,7 +227,16 @@ const OtpVerification = () => {
             children="Verify OTP"
             className="sm:px-32 px-16 py-7 rounded-3xl text-3xl bg-budget-buddy-400/20 text-budget-buddy-600 hover:bg-budget-buddy-600 hover:text-white transition-all ease-in-out cursor-pointer disabled:cursor-not-allowed disabled:bg-budget-buddy-400/20"
             onClick={handleOtpVerification}
-          ></button>
+          >
+            {loading ? (
+              <div className="flex items-center gap-4">
+                <Loading w="w-8" h="h-8" />
+                Verify OTP
+              </div>
+            ) : (
+              "Verify OTP"
+            )}
+          </button>
         </form>
         {time === 0 ? (
           <div className="w-full flex justify-center items-center gap-8">
@@ -235,10 +245,18 @@ const OtpVerification = () => {
             </p>
             <button
               type="button"
-              children="Resend OTP"
               className="sm:px-10 px-6 py-4 text-2xl font-medium rounded-2xl bg-budget-buddy-400/20 text-budget-buddy-600 hover:bg-budget-buddy-600 hover:text-white cursor-pointer transition-all ease-in-out"
               onClick={handleOtpVerification}
-            ></button>
+            >
+              {loading ? (
+                <div className="flex items-center gap-4">
+                  <Loading w="w-8" h="h-8" />
+                  Resend OTP
+                </div>
+              ) : (
+                "Resend OTP"
+              )}
+            </button>
           </div>
         ) : null}
       </div>

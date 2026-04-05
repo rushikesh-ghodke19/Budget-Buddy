@@ -5,6 +5,7 @@ import useToast from "../hooks/useToast";
 import { API_PATHS, BASE_URL } from "../utils/apiPaths";
 import { useNavigate } from "react-router-dom";
 import ExpensesTable from "../components/ExpensesTable";
+import Loading from "../components/Loading";
 
 const ViewExpenses = () => {
   const [selectedYear, setSelectedYear] = useState("2026");
@@ -15,7 +16,7 @@ const ViewExpenses = () => {
   const navigate = useNavigate();
 
   const userId = localStorage.getItem("userId");
-  const { callApi } = useApi();
+  const { callApi, loading } = useApi();
   const { showError, showWarning, showSuccess } = useToast();
 
   const wrapperRef = useRef(null);
@@ -128,7 +129,11 @@ const ViewExpenses = () => {
         </div>
 
         {/* Expenses */}
-        {expenses.length === 0 ? (
+        {loading ? (
+          <div className="w-full mt-6 flex flex-col items-center justify-center border border-gray-300 rounded-2xl bg-white py-16 px-6 text-center">
+            <Loading w="w-14" h="h-14" />
+          </div>
+        ) : expenses.length === 0 ? (
           <div className="w-full mt-6 flex flex-col items-center justify-center border border-dashed border-gray-300 rounded-2xl bg-white py-16 px-6 text-center">
             <div className="w-28 h-28 flex items-center justify-center rounded-full bg-budget-buddy-100 text-budget-buddy-600 text-6xl mb-6">
               💸

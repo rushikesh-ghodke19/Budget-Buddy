@@ -6,6 +6,7 @@ import useToast from "../hooks/useToast";
 import useApi from "../hooks/useApi";
 import { API_PATHS, BASE_URL } from "../utils/apiPaths";
 import { Data } from "../context/DataProvider";
+import Loading from "../components/Loading";
 
 const SignIn = () => {
   const { setIsUserLoggedIn } = useContext(Data);
@@ -17,7 +18,7 @@ const SignIn = () => {
 
   const { showError, showSuccess, showInfo, showWarning } = useToast();
 
-  const { callApi } = useApi();
+  const { callApi, loading } = useApi();
 
   const handleSignIn = async () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -144,10 +145,18 @@ const SignIn = () => {
               <div className="w-full flex justify-center">
                 <button
                   type="button"
-                  children="Sign In"
                   className="px-26 py-6 rounded-2xl text-3xl font-medium bg-budget-buddy-400/20 text-budget-buddy-600 hover:bg-budget-buddy-600 hover:text-white tracking-wide transition-colors duration-300 ease-in-out cursor-pointer"
                   onClick={handleSignIn}
-                ></button>
+                >
+                  {loading ? (
+                    <div className="flex items-center gap-4">
+                      <Loading w="w-8" h="h-8" />
+                      Sign In
+                    </div>
+                  ) : (
+                    "Sign In"
+                  )}
+                </button>
               </div>
             </div>
           </form>

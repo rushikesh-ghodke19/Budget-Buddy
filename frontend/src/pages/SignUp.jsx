@@ -5,6 +5,7 @@ import useToast from "../hooks/useToast";
 import useApi from "../hooks/useApi";
 import { CiAt, CiLock, CiUser } from "react-icons/ci";
 import { API_PATHS, BASE_URL } from "../utils/apiPaths";
+import Loading from "../components/Loading";
 
 const SignUp = () => {
   const { showError, showInfo, showWarning } = useToast();
@@ -165,7 +166,7 @@ const Password = ({ userData, setStep }) => {
   const inputRefs = [useRef(null), useRef(null)];
   const navigate = useNavigate();
 
-  const { callApi } = useApi();
+  const { callApi, loading } = useApi();
 
   const handleSignUp = async () => {
     console.log("Handle Signup hit");
@@ -218,7 +219,7 @@ const Password = ({ userData, setStep }) => {
         password,
       },
     );
-    
+
     if (error) {
       showError("SignUp Failed", error?.message || "Something went wrong.");
       console.error("ERROR:", error);
@@ -279,10 +280,18 @@ const Password = ({ userData, setStep }) => {
         ></button>
         <button
           type="button"
-          children="Sign Up"
           className="w-fit sm:px-20 px-16 py-6 rounded-2xl text-3xl font-medium bg-budget-buddy-400/20 text-budget-buddy-600 hover:bg-budget-buddy-600 hover:text-white transition-colors ease-in-out cursor-pointer"
           onClick={handleSignUp}
-        ></button>
+        >
+          {loading ? (
+            <div className="flex items-center gap-4">
+              <Loading w="w-8" h="h-8" />
+              Sign Up
+            </div>
+          ) : (
+            "Sign Up"
+          )}
+        </button>
       </div>
     </div>
   );
