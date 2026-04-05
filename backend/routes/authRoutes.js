@@ -1,5 +1,6 @@
 import express from "express";
 import {
+  sendResetPasswordOtp,
   userOtpVerification,
   userSignIn,
   userSignUp,
@@ -11,6 +12,7 @@ const authRouter = express.Router();
 authRouter.post("/signup", userSignUp);
 authRouter.post("/signin", userSignIn);
 authRouter.post("/otp-verification", userOtpVerification);
+authRouter.post("/send-resetpassword-otp", sendResetPasswordOtp);
 
 authRouter.get("/profile", authMiddleware, async (req, res) => {
   try {

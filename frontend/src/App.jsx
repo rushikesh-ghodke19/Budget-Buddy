@@ -8,6 +8,8 @@ import OtpVerification from "./pages/OtpVerification";
 import { useContext } from "react";
 import { Data } from "./context/DataProvider";
 import Home from "./pages/Home";
+import SendResetPasswordOtp from "./pages/SendResetPasswordOtp";
+import ResetPassword from "./pages/ResetPassword";
 
 function App() {
   const { isUserLoggedIn } = useContext(Data);
@@ -46,6 +48,11 @@ function App() {
                 )
               }
             />
+            <Route
+              path="/auth/send-resetpassword-otp"
+              element={<SendResetPasswordOtp />}
+            />
+            <Route path="/auth/reset-password" element={<ResetPassword />} />
             <Route
               path="/view-expenses"
               element={

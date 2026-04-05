@@ -62,6 +62,7 @@ const OtpVerification = () => {
   };
 
   const handleOtpVerification = async () => {
+    console.log(purpose, email);
     const enteredOtp = userOtp.join("");
 
     const emptyIndex = userOtp.findIndex((value) => !value);
@@ -92,67 +93,25 @@ const OtpVerification = () => {
         showSuccess("Verification Successful", data.message);
 
         setTimeout(() => {
-          setIsUserLoggedIn(true);
-          localStorage.setItem("userLoggedIn", "true");
-          localStorage.setItem("token", data.token);
-          localStorage.removeItem("otpExpireAt");
-
           if (purpose === "signup") {
+            setIsUserLoggedIn(true);
+            localStorage.setItem("userLoggedIn", "true");
+            localStorage.setItem("token", data.token);
+            localStorage.removeItem("otpExpireAt");
             navigate("/");
-          } else if (purpose === "reset-password") {
-            navigate("/reset-password?email?=" + email);
+            return;
+          }
+          if (purpose === "send-resetpassword-otp") {
+            localStorage.removeItem("otpExpireAt");
+            localStorage.removeItem("userId");
+            navigate(`/auth/reset-password?email=${email}`);
+            return;
           }
         }, 3000);
       }
     }
   };
-  // const handleOtpVerification = async () => {
-  //   console.log("function called");
 
-  //   const enteredOtp = userOtp.join("");
-
-  //   const emptyIndex = userOtp.findIndex((value) => !value);
-
-  //   if (emptyIndex !== -1) {
-  //     showInfo("Incomplete Otp", "Please enter all 6 digits to continue.");
-  //     inputRefs[emptyIndex].current.focus();
-  //     return;
-  //   }
-
-  //   const { data, error } = await callApi(
-  //     "post",
-  //     `${BASE_URL}${API_PATHS.AUTH.OTPVERIFICATION}`,
-  //     { userOtp: enteredOtp, userId },
-  //   );
-
-  //   if (error) {
-  //     console.log(error);
-  //     showError("Error", error.message);
-  //     return;
-  //   }
-
-  //   if (!data) return;
-
-  //   if (!data.success) {
-  //     showWarning("Warning", data.message);
-  //     return;
-  //   }
-
-  //   showSuccess("Verification Successful", data.message);
-
-  //   setTimeout(() => {
-  //     setIsUserLoggedIn(true);
-  //     localStorage.setItem("userLoggedIn", "true");
-  //     localStorage.setItem("token", data.token);
-  //     localStorage.removeItem("otpExpireAt");
-
-  //     if (purpose === "signup") {
-  //       navigate("/");
-  //     } else if (purpose === "reset-password") {
-  //       navigate(`/reset-password?email=${email}`);
-  //     }
-  //   }, 3000);
-  // };
   useEffect(() => {
     if (!expireAt) return;
 

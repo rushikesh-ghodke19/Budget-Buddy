@@ -173,3 +173,59 @@ export const userOtpVerification = async (req, res) => {
     res.json({ success: false, message: error.message });
   }
 };
+
+//? Send Reset Password OTP Controller
+
+export const sendResetPasswordOtp = async (req, res) => {
+  const { email } = req.body;
+  const EXPIRY_MINUTES = 5;
+
+  if (!email) {
+    return res.json({ success: false, message: "Email is required" });
+  }
+
+  try {
+    const user = await userModel.findOne({ email });
+
+    if (!user) {
+      console.log("Invalid email");
+      return res.json({ success: false, message: "Invalid email" });
+    }
+    if (!user.isAccountVerified) {
+      console.log("Your account is not verified");
+      return res.json({
+        success: false,
+        message: "Your account is not verified",
+      });
+    }
+
+    const otp = generateOTP();
+    const expireAt = new Date(Date.now() + EXPIRY_MINUTES * 60 * 1000);
+
+    user.verifyOtp = otp;
+    user.verifyOtpExpireAt = expireAt;
+
+    await user.save();
+
+    try {
+      await sendVerificationOtp(
+        email,
+        "Password Reset Otp",
+        `Your verification OTP is ${otp}. Verify your account using this Otp. It will expire in ${EXPIRY_MINUTES} minutes.`,
+      );
+      console.log("Email sent successfully");
+    } catch (error) {
+      console.log(error);
+      return res.json({ success: false, message: error.message });
+    }
+
+    res.json({
+      success: true,
+      message: "Otp sent successfully",
+      userData: user,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.json({ success: false, message: error.message });
+  }
+};

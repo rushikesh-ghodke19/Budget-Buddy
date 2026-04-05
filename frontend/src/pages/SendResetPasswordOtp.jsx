@@ -1,60 +1,36 @@
-import React, { useContext, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Input from "../components/Input";
-import { CiAt, CiLock } from "react-icons/ci";
-import useToast from "../hooks/useToast";
-import useApi from "../hooks/useApi";
-import { API_PATHS, BASE_URL } from "../utils/apiPaths";
-import { Data } from "../context/DataProvider";
 import Loading from "../components/Loading";
+import useApi from "../hooks/useApi";
+import useToast from "../hooks/useToast";
+import { CiAt } from "react-icons/ci";
+import { API_PATHS, BASE_URL } from "../utils/apiPaths";
 
-const SignIn = () => {
-  const { setIsUserLoggedIn } = useContext(Data);
+const SendResetPasswordOtp = () => {
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const inputRefs = [useRef(null), useRef(null), useRef(null)];
 
-  const navigate = useNavigate();
-
-  const { showError, showSuccess, showInfo, showWarning } = useToast();
+  const inputRef = useRef(null);
 
   const { callApi, loading } = useApi();
+  const { showInfo, showWarning, showSuccess, showError } = useToast();
 
-  const handleSignIn = async () => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const navigate = useNavigate()
 
+  const handleSendResetPasswordOtp = async () => {
     if (!email) {
       showInfo(
         "Email Missing",
         "Please provide your email address to proceed.",
       );
-      inputRefs[0].current.focus();
+      inputRef.current.focus();
       return false;
     }
 
-    if (!emailRegex.test(email)) {
-      showError(
-        "Email Format Error",
-        "The email format looks incorrect. Please enter a valid email.",
-      );
-      inputRefs[1].current.focus();
-      return false;
-    }
-
-    if (!password) {
-      showInfo("Password Missing", "Please enter your password to log in.");
-      inputRefs[1].current.focus();
-      return false;
-    }
-
-    //? API Call
     const { data, error } = await callApi(
       "post",
-      `${BASE_URL}${API_PATHS.AUTH.SIGNIN}`,
-      {
-        email,
-        password,
-      },
+      `${BASE_URL}${API_PATHS.AUTH.SENDRESETPASSWORDOTP}`,
+      { email },
     );
 
     if (error) {
@@ -68,19 +44,18 @@ const SignIn = () => {
     if (!data.success) {
       showWarning("Warning", data.message);
       return;
-    } else {
-      showSuccess("SignIn Successful");
-
-      setTimeout(() => {
-        setIsUserLoggedIn(true);
-        localStorage.setItem("userId", data.userData._id);
-        localStorage.setItem("userLoggedIn", "true");
-        localStorage.setItem("token", data.token);
-        localStorage.removeItem("otpExpireAt");
-
-        navigate("/");
-      }, 3000);
     }
+
+    showSuccess("Otp Sent", "OTP sent to your email.");
+
+    localStorage.setItem("userId", data.userData._id);
+    localStorage.setItem("otpExpireAt", data.userData.verifyOtpExpireAt);
+
+    setTimeout(() => {
+      navigate(
+        `/auth/otp-verification?purpose=send-resetpassword-otp&email=${data?.userData.email}`,
+      );
+    }, 1500);
   };
   return (
     <div className="w-full h-screen bg-[radial-gradient(circle_at_center,rgba(5,223,114,0.05)_10%,rgba(254,243,198,0.1)_65%)] lg:px-72 md:px-48 sm:px-24 px-12 py-24">
@@ -89,12 +64,12 @@ const SignIn = () => {
           <div className="w-full flex justify-end">
             <div className="flex items-center gap-3">
               <p className="sm:text-2xl text-xl text-budget-buddy-950 font-medium tracking-wide">
-                Don't have an account?
+                Already have an account?
               </p>
-              <Link to="/auth/signup">
+              <Link to="/auth/signin">
                 <button
                   type="button"
-                  children="Sign Up"
+                  children="Sign In"
                   className="sm:px-6 px-4 sm:py-3 py-2 sm:text-2xl text-xl rounded-2xl tracking-wide font-medium bg-budget-buddy-400/20 text-budget-buddy-600 hover:bg-budget-buddy-600 hover:text-white transition-all duration-300 ease-in-out cursor-pointer"
                 ></button>
               </Link>
@@ -103,10 +78,10 @@ const SignIn = () => {
 
           <div className="flex flex-col gap-6">
             <h1 className="text-center md:text-6xl sm:text-5xl text-4xl font-semibold text-budget-buddy-950 tracking-wide">
-              SignIn To Your Account
+              Reset Your Password
             </h1>
             <p className="text-lg text-budget-buddy-950/60 text-center font-medium tracking-wide">
-              Welcome back! Please enter your email & password to continue.
+              Enter your email to continue.
             </p>
           </div>
 
@@ -121,40 +96,21 @@ const SignIn = () => {
                 onChange={(e) => setEmail(e.target.value)}
                 icon={<CiAt />}
                 label="Email"
-                ref={inputRefs[0]}
+                ref={inputRef}
               />
-              <Input
-                type="password"
-                id="password"
-                name="password"
-                placeholder="Enter Your Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                icon={<CiLock />}
-                label="Password"
-                ref={inputRefs[1]}
-              />
-              <div className="flex justify-end items-center gap-3">
-                <p className="sm:text-2xl text-xl text-budget-buddy-950 font-medium tracking-wide">
-                  Forgot password?
-                </p>
-                <Link to="/auth/send-resetpassword-otp" className="sm:text-2xl text-xl rounded-2xl tracking-wide font-medium text-budget-buddy-600 transition-all duration-300 ease-in-out cursor-pointer">
-                  Reset Now
-                </Link>
-              </div>
               <div className="w-full flex justify-center">
                 <button
                   type="button"
                   className="px-26 py-6 rounded-2xl text-3xl font-medium bg-budget-buddy-400/20 text-budget-buddy-600 hover:bg-budget-buddy-600 hover:text-white tracking-wide transition-colors duration-300 ease-in-out cursor-pointer"
-                  onClick={handleSignIn}
+                  onClick={handleSendResetPasswordOtp}
                 >
                   {loading ? (
                     <div className="flex items-center gap-4">
                       <Loading w="w-8" h="h-8" />
-                      Sign In
+                      Continue
                     </div>
                   ) : (
-                    "Sign In"
+                    "Continue"
                   )}
                 </button>
               </div>
@@ -166,4 +122,4 @@ const SignIn = () => {
   );
 };
 
-export default SignIn;
+export default SendResetPasswordOtp;
