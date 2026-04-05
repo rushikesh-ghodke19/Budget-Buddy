@@ -23,6 +23,10 @@ app.use("/api/user", userRouter);
 
 app.use("/api/expenses", expenseRouter);
 
+app.get("/test", (req, res) => {
+  res.json({ message: "Server working" });
+});
+
 app.listen(port, () => {
   console.log(`Server is running on PORT ${port}`);
 });

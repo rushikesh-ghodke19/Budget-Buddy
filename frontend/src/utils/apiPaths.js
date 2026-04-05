@@ -1,4 +1,4 @@
-export const BASE_URL = "https://budget-buddy-server-z7vg.onrender.com";
+export const BASE_URL = "https://budget-buddy-server-dq0g.onrender.com";
 
 export const API_PATHS = {
   AUTH: {
