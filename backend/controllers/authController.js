@@ -229,3 +229,44 @@ export const sendResetPasswordOtp = async (req, res) => {
     return res.json({ success: false, message: error.message });
   }
 };
+
+//? Reset Password Controller
+
+export const resetPassword = async (req, res) => {
+  const { email, newPassword } = req.body;
+
+  if (!email || !newPassword) {
+    console.log("Missing " + email || newPassword);
+    return res.json({ success: false, message: "Missing details" });
+  }
+
+  try {
+    const user = await userModel.findOne({ email });
+
+    if (!user) {
+      console.log("User not found");
+      return res.json({ success: false, message: "User not found" });
+    }
+
+    const isPasswordMatch = await bcrypt.compare(newPassword, user.password);
+    if (isPasswordMatch) {
+      return res.json({
+        success: false,
+        message: "Password cannot be same as previous.",
+      });
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    user.password = hashedPassword;
+    await user.save();
+
+    res.json({
+      success: true,
+      message: "Your password has been reset successfully!",
+    });
+  } catch (error) {
+    console.log(error);
+    return res.json({ success: false, message: error.message });
+  }
+};

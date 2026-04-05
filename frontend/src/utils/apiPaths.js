@@ -6,7 +6,8 @@ export const API_PATHS = {
     SIGNUP: "/api/auth/signup",
     SIGNIN: "/api/auth/signin",
     OTPVERIFICATION: "/api/auth/otp-verification",
-    SENDRESETPASSWORDOTP: "/api/auth/send-resetpassword-otp"
+    SENDRESETPASSWORDOTP: "/api/auth/send-resetpassword-otp",
+    RESETPASSWORD: "/api/auth/reset-password",
   },
   USER: {
     GETUSERDATA: "/api/user/userdata",
