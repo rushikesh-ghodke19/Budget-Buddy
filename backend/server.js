@@ -5,6 +5,8 @@ import "dotenv/config";
 import authRouter from "./routes/authRoutes.js";
 import userRouter from "./routes/userRoutes.js";
 import expenseRouter from "./routes/expenseRoutes.js";
+import dns from "dns";
+dns.setDefaultResultOrder("ipv4first");
 
 const app = express();
 const port = process.env.PORT || 5000;
