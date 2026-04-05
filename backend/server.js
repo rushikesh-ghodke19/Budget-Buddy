@@ -10,9 +10,13 @@ const app = express();
 const port = process.env.PORT || 5000;
 connectDB();
 
-app.use(cors({ credentials: true }));
+app.use(
+  cors({
+    origin: "https://budget-buddy-phfp.onrender.com",
+    credentials: true,
+  }),
+);
 app.use(express.json());
-app.options("/*", cors());
 
 app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
