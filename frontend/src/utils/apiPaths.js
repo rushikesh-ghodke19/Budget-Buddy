@@ -12,5 +12,6 @@ export const API_PATHS = {
   EXPENSE: {
     ADDEXPENSE: "/api/expenses/add-expense",
     VIEWEXPENSE: "/api/expenses/view-expenses",
+    GETSTATS: "/api/expenses/get-stats",
   },
 };

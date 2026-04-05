@@ -3,6 +3,7 @@ import useApi from "../hooks/useApi";
 import { Data } from "../context/DataProvider";
 import KPICard from "../components/KPICard";
 import ExpensesTable from "../components/ExpensesTable";
+import { API_PATHS, BASE_URL } from "../utils/apiPaths";
 
 const Home = () => {
   const { user } = useContext(Data);
@@ -20,7 +21,7 @@ const Home = () => {
   const handleGetStats = async () => {
     const { data, error } = await callApi(
       "post",
-      `http://localhost:8080/api/expenses/get-stats`,
+      `${BASE_URL}${API_PATHS.EXPENSE.GETSTATS}`,
       { userId },
     );
 
