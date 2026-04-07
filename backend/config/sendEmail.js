@@ -1,38 +1,21 @@
-import nodemailer from "nodemailer";
-import dns from "dns";
+import { Resend } from "resend";
 
-// Force Node to use IPv4 first for all network requests
-dns.setDefaultResultOrder('ipv4first');
+// Initialize Resend with your API Key from Render Environment Variables
+const resend = new Resend(process.env.RESEND_API_KEY);
 
-const transpoter = nodemailer.createTransport({
-  host: '142.250.141.108', // This is one of smtp.gmail.com's IPv4 addresses
-  port: 465,
-  secure: true,
-  auth: {
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASS,
-  },
-  tls: {
-    servername: 'smtp.gmail.com' // Necessary when using a direct IP
+export const sendVerificationOtp = async (email, subject, message) => {
+  try {
+    const data = await resend.emails.send({
+      from: "onboarding@resend.dev", // Use this for testing; verify your domain later for a custom email
+      to: email,
+      subject: subject,
+      text: message,
+    });
+    return data;
+  } catch (error) {
+    console.error("Resend Error:", error);
+    throw error;
   }
-});
-
-transpoter.verify((error, success) => {
-  if (error) {
-    console.log("Transporter connection error: ", error);
-  } else {
-    console.log("Server is ready to take our messages");
-  }
-});
-
-export const sendVerificationOtp = (email, subject, message) => {
-  const mailOptions = {
-    from: process.env.SMTP_USER,
-    to: email,
-    subject: subject,
-    text: message,
-  };
-  return transpoter.sendMail(mailOptions);
 };
 
 export const generateOTP = () => {
