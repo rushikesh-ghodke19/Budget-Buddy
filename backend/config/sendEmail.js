@@ -6,7 +6,7 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 export const sendVerificationOtp = async (email, subject, message) => {
   try {
     const data = await resend.emails.send({
-      from: "onboarding@resend.dev", // Use this for testing; verify your domain later for a custom email
+      from: process.env.SMTP_USER, // Use this for testing; verify your domain later for a custom email
       to: email,
       subject: subject,
       text: message,

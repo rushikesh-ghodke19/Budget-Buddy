@@ -49,13 +49,22 @@ export const userSignUp = async (req, res) => {
     await user.save();
 
     try {
-      await sendVerificationOtp(
+      const emailResponse = await sendVerificationOtp(
         email,
         "Account Verification OTP",
-        `Your verification OTP is ${otp}. Verify your account using this OTP. It will expire in ${EXPIRY_MINUTES} minutes.`,
+        `Your verification OTP is ${otp}. It will expire in ${EXPIRY_MINUTES} minutes.`,
       );
+
+      // Check if Resend returned an error (e.g., sending to an unverified email)
+      if (emailResponse.error) {
+        console.error("Resend API Error:", emailResponse.error);
+        return res.json({
+          success: false,
+          message: "Account created, but failed to send email.",
+        });
+      }
     } catch (error) {
-      console.log("Error sending otp.");
+      console.log("SMTP/API Error:", error);
       return res.json({ success: false, message: "Error sending otp" });
     }
 
@@ -209,14 +218,22 @@ export const sendResetPasswordOtp = async (req, res) => {
     await user.save();
 
     try {
-      await sendVerificationOtp(
+      const emailResponse = await sendVerificationOtp(
         email,
         "Password Reset OTP",
-        `Your verification OTP is ${otp}. Verify your account using this OTP. It will expire in ${EXPIRY_MINUTES} minutes.`,
+        `Your verification OTP is ${otp}. It will expire in ${EXPIRY_MINUTES} minutes.`,
       );
+
+      if (emailResponse.error) {
+        console.error("Resend API Error:", emailResponse.error);
+        return res.json({
+          success: false,
+          message: "Failed to send reset email.",
+        });
+      }
+
       console.log("Email sent successfully");
     } catch (error) {
-      console.log(error);
       return res.json({ success: false, message: error.message });
     }
 
