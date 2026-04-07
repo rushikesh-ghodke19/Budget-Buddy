@@ -1,11 +1,13 @@
 import nodemailer from "nodemailer";
+import dns from "dns";
+
+// Force Node to use IPv4 first for all network requests
+dns.setDefaultResultOrder('ipv4first');
 
 const transpoter = nodemailer.createTransport({
   host: "smtp.gmail.com",
   port: 587,
   secure: false, // Must be false for 587
-  // This forces the connection to use IPv4
-  family: 4, 
   auth: {
     user: process.env.SMTP_USER,
     pass: process.env.SMTP_PASS,
@@ -13,6 +15,14 @@ const transpoter = nodemailer.createTransport({
   tls: {
     rejectUnauthorized: false,
     minVersion: "TLSv1.2"
+  }
+});
+
+transpoter.verify((error, success) => {
+  if (error) {
+    console.log("Transporter connection error: ", error);
+  } else {
+    console.log("Server is ready to take our messages");
   }
 });
 
