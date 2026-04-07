@@ -209,23 +209,10 @@ export const sendResetPasswordOtp = async (req, res) => {
     await user.save();
 
     try {
-      await axios.post(
-        "https://api.brevo.com/v3/smtp/email",
-        {
-          sender: {
-            name: "Budget Buddy",
-            email: process.env.SMTP_USER, // must be verified in Brevo
-          },
-          to: [{ email }],
-          subject: "Password Reset OTP",
-          textContent: `Your verification OTP is ${otp}. It will expire in ${EXPIRY_MINUTES} minutes.`,
-        },
-        {
-          headers: {
-            "api-key": process.env.BREVO_API_KEY,
-            "Content-Type": "application/json",
-          },
-        },
+      await sendVerificationOtp(
+        email,
+        "Password Reset OTP",
+        `Your verification OTP is ${otp}. Verify your account using this OTP. It will expire in ${EXPIRY_MINUTES} minutes.`,
       );
       console.log("Email sent successfully");
     } catch (error) {
