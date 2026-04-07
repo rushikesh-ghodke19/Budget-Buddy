@@ -2,15 +2,16 @@ import nodemailer from "nodemailer";
 
 const transpoter = nodemailer.createTransport({
   host: "smtp.gmail.com",
-  port: 465,
-  secure: true, // Use SSL
+  port: 587,
+  secure: false, // 'false' is REQUIRED for port 587
   auth: {
     user: process.env.SMTP_USER,
     pass: process.env.SMTP_PASS,
   },
-  // This is the key part: it tells Nodemailer how to handle the connection
   tls: {
-    rejectUnauthorized: false, // Helps with some self-signed certificate issues on cloud hosts
+    // This helps bypass some network restrictions on cloud hosts
+    rejectUnauthorized: false,
+    minVersion: "TLSv1.2",
   },
 });
 
