@@ -2,7 +2,7 @@ import nodemailer from "nodemailer";
 
 const transpoter = nodemailer.createTransport({
   host: "smtp.gmail.com",
-  port: 587,
+  port: 2525,
   secure: false, // 'false' is REQUIRED for port 587
   auth: {
     user: process.env.SMTP_USER,
@@ -13,6 +13,8 @@ const transpoter = nodemailer.createTransport({
     rejectUnauthorized: false,
     minVersion: "TLSv1.2",
   },
+  debug: true,
+  logger: true,
 });
 
 export const sendVerificationOtp = (email, subject, message) => {
