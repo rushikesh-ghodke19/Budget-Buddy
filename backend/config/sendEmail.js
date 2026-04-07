@@ -5,16 +5,15 @@ import dns from "dns";
 dns.setDefaultResultOrder('ipv4first');
 
 const transpoter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 587,
-  secure: false, // Must be false for 587
+  host: '142.250.141.108', // This is one of smtp.gmail.com's IPv4 addresses
+  port: 465,
+  secure: true,
   auth: {
     user: process.env.SMTP_USER,
     pass: process.env.SMTP_PASS,
   },
   tls: {
-    rejectUnauthorized: false,
-    minVersion: "TLSv1.2"
+    servername: 'smtp.gmail.com' // Necessary when using a direct IP
   }
 });
 
