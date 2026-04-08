@@ -9,7 +9,7 @@ const mailerSend = new MailerSend({
 export const sendVerificationOTP = async (email, subject, message) => {
   try {
     const sentFrom = new Sender(
-      "budget-buddy@test-zkq340erk20gd796.mlsender.net", // ⚠️ MUST be verified in MailerSend
+      "budget-buddy@test-zkq340erk20gd796.mlsender.net",
       "Budget Buddy",
     );
 

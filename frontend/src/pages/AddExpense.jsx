@@ -12,6 +12,7 @@ import useToast from "../hooks/useToast";
 import { Data } from "../context/DataProvider";
 import useApi from "../hooks/useApi";
 import { API_PATHS, BASE_URL } from "../utils/apiPaths";
+import Loading from "../components/Loading";
 
 const AddExpense = () => {
   const { user } = useContext(Data);
@@ -29,7 +30,7 @@ const AddExpense = () => {
   const [amount, setAmount] = useState("");
   const [paymentMode, setPaymentMode] = useState("");
 
-  const { callApi } = useApi();
+  const { callApi, loading } = useApi();
 
   const inputRefs = [useRef(null), useRef(null), useRef(null), useRef(null)];
 
@@ -257,16 +258,23 @@ const AddExpense = () => {
             <div className="w-full flex items-center gap-4">
               <Link
                 to="/view-expenses"
-                className="px-8 py-5 bg-green-600 rounded-2xl text-white text-xl tracking-wide hover:bg-green-500 transition-all ease-in-out cursor-pointer"
+                className="px-8 py-5 bg-green-400/20 rounded-2xl text-green-600 text-xl tracking-wide hover:bg-green-600 hover:text-white transition-all ease-in-out cursor-pointer"
               >
                 View Expenses
               </Link>
               <button
                 type="button"
-                className="px-8 py-5 bg-blue-600 rounded-2xl text-white text-xl tracking-wide hover:bg-blue-500 transition-all ease-in-out cursor-pointer"
+                className="px-8 py-5 bg-budget-buddy-400/20 rounded-2xl text-budget-buddy-600 hover:text-white text-xl tracking-wide hover:bg-budget-buddy-600 transition-all ease-in-out cursor-pointer"
                 onClick={handleAddExpense}
               >
-                Add Expense
+                {loading ? (
+                  <div className="flex items-center gap-4">
+                    <Loading w="w-8" h="h-8" />
+                    Adding Expense
+                  </div>
+                ) : (
+                  "Add Expense"
+                )}
               </button>
             </div>
           </form>

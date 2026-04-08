@@ -190,7 +190,7 @@ const OtpVerification = () => {
             {loading ? (
               <div className="flex items-center gap-4">
                 <Loading w="w-8" h="h-8" />
-                Verify OTP
+                Verifying OTP
               </div>
             ) : (
               "Verify OTP"
@@ -210,7 +210,7 @@ const OtpVerification = () => {
               {loading ? (
                 <div className="flex items-center gap-4">
                   <Loading w="w-8" h="h-8" />
-                  Resend OTP
+                  Resending OTP
                 </div>
               ) : (
                 "Resend OTP"

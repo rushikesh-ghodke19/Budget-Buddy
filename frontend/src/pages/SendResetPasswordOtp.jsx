@@ -109,7 +109,7 @@ const SendResetPasswordOtp = () => {
                   {loading ? (
                     <div className="flex items-center gap-4">
                       <Loading w="w-8" h="h-8" />
-                      Continue
+                      Sending OTP
                     </div>
                   ) : (
                     "Continue"
