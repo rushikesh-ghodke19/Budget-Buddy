@@ -1,11 +1,13 @@
 import nodemailer from "nodemailer";
 
 const transporter = nodemailer.createTransport({
-  service: "gmail",
+  port: 465,
+  service: "smtp.gmail.com",
   auth: {
     user: process.env.SMTP_USER,
     pass: process.env.SMTP_PASS,
   },
+  secure: true
 });
 
 export const sendVerificationOTP = async (email, subject, message) => {
