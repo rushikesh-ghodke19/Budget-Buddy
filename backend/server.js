@@ -12,7 +12,7 @@ connectDB();
 
 app.use(
   cors({
-    origin: "https://budget-buddy-phfp.onrender.com",
+    // origin: "https://budget-buddy-phfp.onrender.com",
     credentials: true,
   }),
 );

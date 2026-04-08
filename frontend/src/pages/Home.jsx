@@ -5,6 +5,7 @@ import KPICard from "../components/KPICard";
 import ExpensesTable from "../components/ExpensesTable";
 import { API_PATHS, BASE_URL } from "../utils/apiPaths";
 import Loading from "../components/Loading";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
   const { user } = useContext(Data);
@@ -13,7 +14,9 @@ const Home = () => {
   const [totalExpenses, setTotalExpenses] = useState(0);
   const [thisMonthExpenses, setThisMonthExpenses] = useState(0);
   const [todayExpenses, setTodayExpenses] = useState(0);
-  const [recentExpenses, setRecentExpenes] = useState(null);
+  const [recentExpenses, setRecentExpenes] = useState([]);
+
+  const navigate = useNavigate();
 
   const hour = new Date().getHours();
 
@@ -96,8 +99,31 @@ const Home = () => {
           <div className="w-full mt-6 flex flex-col items-center justify-center border border-gray-300 rounded-2xl bg-white py-16 px-6 text-center">
             <Loading w="w-14" h="h-14" />
           </div>
-        ) : !recentExpenses ? (
-          <p className="text-gray-500 text-sm">No recent expenses</p>
+        ) : recentExpenses.length === 0 ? (
+          <div className="w-full flex flex-col items-center justify-center rounded-2xl bg-white py-16 px-6 text-center">
+            <div className="w-28 h-28 flex items-center justify-center rounded-full bg-budget-buddy-100 text-budget-buddy-600 text-6xl mb-6">
+              💸
+            </div>
+
+            <h2 className="text-3xl font-semibold text-gray-800">
+              No Recent Expenses Found
+            </h2>
+
+            <p className="mt-2 text-gray-600 text-xl">
+              You don’t have any recent expenses yet.
+            </p>
+
+            <p className="mt-1 text-gray-500 text-lg">
+              Start tracking your spending by adding a new expense.
+            </p>
+
+            <button
+              className="mt-6 px-6 py-3 rounded-xl bg-budget-buddy-600 text-xl text-white hover:bg-budget-buddy-700 transition cursor-pointer"
+              onClick={() => navigate("/add-expense")}
+            >
+              + Add Expense
+            </button>
+          </div>
         ) : (
           <div className="relative w-full">
             <ExpensesTable

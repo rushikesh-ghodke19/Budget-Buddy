@@ -5,11 +5,11 @@ export const validateAddExpense = (data) => {
   if (!month) return { field: "month", message: "Please select month" };
   if (!day) return { field: "day", message: "Please select day" };
 
-  if (!category.trim())
-    return { field: "category", message: "Category is required" };
+  // if (!category.trim())
+  //   return { field: "category", message: "Category is required" };
 
-  if (!description.trim())
-    return { field: "description", message: "Description is required" };
+  // if (!description.trim())
+  //   return { field: "description", message: "Description is required" };
 
   if (!amount) return { field: "amount", message: "Please enter amount" };
 

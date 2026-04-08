@@ -112,6 +112,30 @@ const OtpVerification = () => {
     }
   };
 
+  const handleResendOtp = async () => {
+    const { data, error } = await callApi(
+      "post",
+      `${BASE_URL}${API_PATHS.AUTH.RESENDOTP}`,
+      { email, purpose },
+    );
+
+    if (error) {
+      showError("SignUp Failed", error?.message || "Something went wrong.");
+      console.error("ERROR:", error);
+      return;
+    }
+
+    if (!data) return;
+
+    if (!data.success) {
+      showWarning("Warning", data.message);
+      return;
+    }
+
+    showSuccess("Otp Resent", data.message);
+    localStorage.setItem("otpExpireAt", data.userData.verifyOtpExpireAt);
+  };
+
   useEffect(() => {
     if (!expireAt) return;
 
@@ -205,7 +229,7 @@ const OtpVerification = () => {
             <button
               type="button"
               className="sm:px-10 px-6 py-4 text-2xl font-medium rounded-2xl bg-budget-buddy-400/20 text-budget-buddy-600 hover:bg-budget-buddy-600 hover:text-white cursor-pointer transition-all ease-in-out"
-              onClick={handleOtpVerification}
+              onClick={handleResendOtp}
             >
               {loading ? (
                 <div className="flex items-center gap-4">

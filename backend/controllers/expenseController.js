@@ -1,6 +1,5 @@
 import expenseModel from "../models/expenseModel.js";
 import userModel from "../models/userModel.js";
-import expenseRouter from "../routes/expenseRoutes.js";
 
 //? Add Expense
 export const addExpense = async (req, res) => {

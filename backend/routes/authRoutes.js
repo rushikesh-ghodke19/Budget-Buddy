@@ -1,5 +1,6 @@
 import express from "express";
 import {
+  resendOtp,
   resetPassword,
   sendResetPasswordOtp,
   userOtpVerification,
@@ -15,6 +16,7 @@ authRouter.post("/signin", userSignIn);
 authRouter.post("/otp-verification", userOtpVerification);
 authRouter.post("/send-resetpassword-otp", sendResetPasswordOtp);
 authRouter.post("/reset-password", resetPassword);
+authRouter.post("/resend-otp", resendOtp);
 
 authRouter.get("/profile", authMiddleware, async (req, res) => {
   try {

@@ -3,7 +3,7 @@ import Loading from "./Loading";
 
 const KPICard = ({ title, value, loading }) => {
   return (
-    <div className="w-full border border-gray-200 p-6 rounded-2xl">
+    <div className="w-full bg-white border border-gray-200 p-6 rounded-2xl">
       <div className="w-full flex flex-col gap-4">
         <h1 className="text-xl text-gray-800 font-semibold tracking-wide">
           {title}

@@ -51,7 +51,7 @@ export const userSignUp = async (req, res) => {
     const emailResponse = await sendVerificationOTP(
       email,
       "Account Verification OTP",
-      `Your verification OTP is ${otp}. It will expire in ${EXPIRY_MINUTES} minutes.`,
+      `Your verification OTP is ${otp}. Verify your email using this Otp. It will expire in ${EXPIRY_MINUTES} minutes.`,
     );
 
     console.log("Email sent:", emailResponse.messageId);
@@ -176,7 +176,7 @@ export const userOtpVerification = async (req, res) => {
 
 export const sendResetPasswordOtp = async (req, res) => {
   const { email } = req.body;
-  const EXPIRY_MINUTES = 5;
+  const EXPIRY_MINUTES = 1;
 
   if (!email) {
     return res.json({ success: false, message: "Email is required" });
@@ -208,7 +208,7 @@ export const sendResetPasswordOtp = async (req, res) => {
     const emailResponse = await sendVerificationOTP(
       email,
       "Password Reset OTP",
-      `Your verification OTP is ${otp}. It will expire in ${EXPIRY_MINUTES} minutes.`,
+      `Your verification OTP is ${otp}. Verify your email using this Otp. It will expire in ${EXPIRY_MINUTES} minutes.`,
     );
 
     console.log("Email sent:", emailResponse.messageId);
@@ -259,6 +259,44 @@ export const resetPassword = async (req, res) => {
       success: true,
       message: "Your password has been reset successfully!",
     });
+  } catch (error) {
+    console.log(error);
+    return res.json({ success: false, message: error.message });
+  }
+};
+
+//? Resend Otp Controller
+
+export const resendOtp = async (req, res) => {
+  const { email, purpose } = req.body;
+  const EXPIRY_MINUTES = 5;
+
+  if (!email) {
+    return res.json({ success: false, message: "Email is required" });
+  }
+
+  try {
+    const user = await userModel.findOne({ email });
+
+    if (!user) return res.json({ success: false, message: "User not found" });
+
+    const newOtp = generateOTP();
+    const expireAt = new Date(Date.now() + EXPIRY_MINUTES * 60 * 1000);
+
+    user.verifyOtp = newOtp;
+    user.verifyOtpExpireAt = expireAt;
+
+    await user.save();
+
+    const emailRespose = await sendVerificationOTP(
+      email,
+      `${purpose === "signup" ? "Account Verificaiton OTP" : purpose === "send-resetpassword-otp" ? "Password Reset OTP" : null}`,
+      `Your verification OTP is ${newOtp}. Verify your email using this Otp. It will expire in ${EXPIRY_MINUTES} minutes.`,
+    );
+
+    console.log("Email send: " + emailRespose);
+
+    res.json({ success: true, message: "Otp resent", userData: user });
   } catch (error) {
     console.log(error);
     return res.json({ success: false, message: error.message });

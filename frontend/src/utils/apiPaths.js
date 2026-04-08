@@ -1,5 +1,5 @@
-// export const BASE_URL = "http://localhost:8080";
-export const BASE_URL = "https://budget-buddy-server-dq0g.onrender.com";
+export const BASE_URL = "http://localhost:8080";
+// export const BASE_URL = "https://budget-buddy-server-dq0g.onrender.com";
 
 export const API_PATHS = {
   AUTH: {
@@ -8,6 +8,7 @@ export const API_PATHS = {
     OTPVERIFICATION: "/api/auth/otp-verification",
     SENDRESETPASSWORDOTP: "/api/auth/send-resetpassword-otp",
     RESETPASSWORD: "/api/auth/reset-password",
+    RESENDOTP: "/api/auth/resend-otp",
   },
   USER: {
     GETUSERDATA: "/api/user/userdata",
