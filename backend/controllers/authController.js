@@ -176,7 +176,7 @@ export const userOtpVerification = async (req, res) => {
 
 export const sendResetPasswordOtp = async (req, res) => {
   const { email } = req.body;
-  const EXPIRY_MINUTES = 1;
+  const EXPIRY_MINUTES = 5;
 
   if (!email) {
     return res.json({ success: false, message: "Email is required" });
