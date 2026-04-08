@@ -45,7 +45,7 @@ const EditExpense = ({ editExpense, setIsEditExpense }) => {
   }, [editExpense]);
   return (
     <div className="fixed inset-0 bg-black/20 lg:px-96 md:px-48 sm:px-24 px-12 z-50 flex items-center justify-center">
-      <div className="bg-white rounded-2xl max-h-[90vh] overflow-y-auto">
+      <div className="bg-white sm:max-w-7xl w-full rounded-2xl max-h-[90vh] overflow-y-auto">
         <div className="w-full px-12 py-6 flex items-center justify-between border-b border-b-gray-200">
           <h1 className="text-[1.8rem] text-gray-700 font-medium">
             Edit Expense
