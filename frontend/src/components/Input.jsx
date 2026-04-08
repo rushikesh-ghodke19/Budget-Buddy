@@ -13,7 +13,7 @@ const Input = forwardRef(
         >
           {label}
         </label>
-        <div className="w-full h-20 relative">
+        <div className="w-full h-18 relative">
           <input
             type={type}
             id={id}

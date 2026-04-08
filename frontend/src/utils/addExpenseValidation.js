@@ -1,15 +1,9 @@
 export const validateAddExpense = (data) => {
-  const { year, month, day, category, description, amount, paymentMode } = data;
+  const { year, month, day, amount, paymentMode } = data;
 
-  if (!year) return { field: "year", message: "Please select year" };
-  if (!month) return { field: "month", message: "Please select month" };
-  if (!day) return { field: "day", message: "Please select day" };
-
-  // if (!category.trim())
-  //   return { field: "category", message: "Category is required" };
-
-  // if (!description.trim())
-  //   return { field: "description", message: "Description is required" };
+  if (!year.trim()) return { field: "year", message: "Please select year" };
+  if (!month.trim()) return { field: "month", message: "Please select month" };
+  if (!day.trim()) return { field: "day", message: "Please select day" };
 
   if (!amount) return { field: "amount", message: "Please enter amount" };
 

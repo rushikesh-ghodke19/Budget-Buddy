@@ -209,7 +209,10 @@ const OtpVerification = () => {
             type="button"
             children="Verify OTP"
             className="sm:px-32 px-16 py-7 rounded-3xl text-3xl bg-budget-buddy-400/20 text-budget-buddy-600 hover:bg-budget-buddy-600 hover:text-white transition-all ease-in-out cursor-pointer disabled:cursor-not-allowed disabled:bg-budget-buddy-400/20"
-            onClick={handleOtpVerification}
+            onClick={(e) => {
+              handleOtpVerification();
+              e.stopPropagation();
+            }}
           >
             {loading ? (
               <div className="flex items-center gap-4">
@@ -229,7 +232,10 @@ const OtpVerification = () => {
             <button
               type="button"
               className="sm:px-10 px-6 py-4 text-2xl font-medium rounded-2xl bg-budget-buddy-400/20 text-budget-buddy-600 hover:bg-budget-buddy-600 hover:text-white cursor-pointer transition-all ease-in-out"
-              onClick={handleResendOtp}
+              onClick={(e) => {
+                handleResendOtp();
+                e.stopPropagation();
+              }}
             >
               {loading ? (
                 <div className="flex items-center gap-4">

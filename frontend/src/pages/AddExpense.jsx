@@ -1,5 +1,4 @@
 import { useContext, useEffect, useRef, useState } from "react";
-import Dropdown from "../components/Dropdown";
 import Input from "../components/Input";
 import { Link } from "react-router-dom";
 import { validateAddExpense } from "../utils/addExpenseValidation";
@@ -8,6 +7,7 @@ import { CiGrid42 } from "react-icons/ci";
 import { CiFileOn } from "react-icons/ci";
 import { CiDollar } from "react-icons/ci";
 import { CiCreditCard1 } from "react-icons/ci";
+import { CiCalendarDate } from "react-icons/ci";
 import useToast from "../hooks/useToast";
 import { Data } from "../context/DataProvider";
 import useApi from "../hooks/useApi";
@@ -19,7 +19,10 @@ const AddExpense = () => {
   const { showWarning, showError, showSuccess } = useToast();
   const userId = localStorage.getItem("userId");
 
-  const [activeDropdown, setActiveDropdown] = useState(null);
+  const date = new Date();
+  let currentYear = date.getFullYear();
+  let currentMonth = date.toLocaleString("en-us", { month: "long" });
+  let currentDate = date.getDate();
 
   const [selectedYear, setSelectedYear] = useState(null);
   const [selectedMonth, setSelectedMonth] = useState(null);
@@ -32,47 +35,15 @@ const AddExpense = () => {
 
   const { callApi, loading } = useApi();
 
-  const inputRefs = [useRef(null), useRef(null), useRef(null), useRef(null)];
-
-  const years = Array.from({ length: 5 }, (_, i) => 2026 + i);
-
-  const months = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
+  const inputRefs = [
+    useRef(null),
+    useRef(null),
+    useRef(null),
+    useRef(null),
+    useRef(null),
+    useRef(null),
+    useRef(null),
   ];
-
-  const wrapperRef = useRef(null);
-
-  const getDaysInMonth = (month, year) => {
-    if (!month || !year) return [];
-
-    const monthIndex = months.indexOf(month);
-
-    const days = new Date(year, monthIndex + 1, 0).getDate();
-
-    return Array.from({ length: days }, (_, i) => i + 1);
-  };
-
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (wrapperRef.current && !wrapperRef.current.contains(e.target)) {
-        setActiveDropdown(null);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
 
   const handleAddExpense = async (e) => {
     e.preventDefault();
@@ -90,10 +61,11 @@ const AddExpense = () => {
     if (validateInput) {
       showWarning("Validation Error", validateInput.message);
 
-      if (validateInput.field === "category") inputRefs[0].current.focus();
-      if (validateInput.field === "description") inputRefs[1].current.focus();
-      if (validateInput.field === "amount") inputRefs[2].current.focus();
-      if (validateInput.field === "paymentMode") inputRefs[3].current.focus();
+      if (validateInput.field === "year") inputRefs[0].current.focus();
+      if (validateInput.field === "month") inputRefs[1].current.focus();
+      if (validateInput.field === "day") inputRefs[2].current.focus();
+      if (validateInput.field === "amount") inputRefs[5].current.focus();
+      if (validateInput.field === "paymentMode") inputRefs[6].current.focus();
       return;
     }
 
@@ -139,55 +111,52 @@ const AddExpense = () => {
 
   return (
     <>
-      <div className="w-full h-screen pt-36">
-        <div className="w-full h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="w-full h-screen pt-36 sm:pb-32 pb-24">
+        <div className="w-full h-full max-w-380 mx-auto px-4 sm:px-6 lg:px-8">
           <div className="py-4 border-b border-b-gray-200">
             <h1 className="text-3xl text-budget-buddy-950 font-semibold tracking-wide">
               Add New Expense
             </h1>
           </div>
           <form className="w-full flex flex-col gap-8">
-            {/* Select Date */}
+            {/* Enter Date */}
             <div className="w-full mt-8">
               <h1 className="text-2xl text-budget-buddy-950 font-semibold tracking-wide">
-                Select Date
+                Enter Date
               </h1>
-              <div
-                ref={wrapperRef}
-                className="w-full flex flex-col sm:flex-row items-start sm:items-center gap-6 sm:gap-8 pt-8"
-              >
-                <Dropdown
-                  width="w-full"
+              <div className="w-full flex flex-col sm:flex-row items-start sm:items-center gap-6 sm:gap-8 pt-8">
+                <Input
+                  width="sm:w-124 w-full"
+                  type="text"
+                  placeholder={`Current Year "${currentYear}"`}
+                  value={selectedYear}
+                  name="Year"
+                  onChange={(e) => setSelectedYear(e.target.value)}
+                  icon={<CiCalendarDate />}
                   label="Year"
-                  data={years}
-                  selected={selectedYear}
-                  setSelected={setSelectedYear}
-                  type="year"
-                  activeDropdown={activeDropdown}
-                  setActiveDropdown={setActiveDropdown}
+                  ref={inputRefs[0]}
                 />
-
-                <Dropdown
-                  width="w-full"
+                <Input
+                  width="sm:w-124 w-full"
+                  type="text"
+                  placeholder={`Current Month "${currentMonth}"`}
+                  value={selectedMonth}
+                  name="Month"
+                  onChange={(e) => setSelectedMonth(e.target.value)}
+                  icon={<CiCalendarDate />}
                   label="Month"
-                  data={months}
-                  selected={selectedMonth}
-                  setSelected={setSelectedMonth}
-                  type="month"
-                  activeDropdown={activeDropdown}
-                  setActiveDropdown={setActiveDropdown}
+                  ref={inputRefs[1]}
                 />
-
-                <Dropdown
-                  width="w-full"
-                  label="Day"
-                  data={getDaysInMonth(selectedMonth, selectedYear)}
-                  selected={selectedDay}
-                  setSelected={setSelectedDay}
-                  type="day"
-                  activeDropdown={activeDropdown}
-                  setActiveDropdown={setActiveDropdown}
-                  disabled={!selectedYear || !selectedMonth}
+                <Input
+                  width="sm:w-124 w-full"
+                  type="number"
+                  placeholder={`Today's Date "${currentDate}"`}
+                  value={selectedDay}
+                  name="Date"
+                  onChange={(e) => setSelectedDay(e.target.value)}
+                  icon={<CiCalendarDate />}
+                  label="Date"
+                  ref={inputRefs[2]}
                 />
               </div>
             </div>
@@ -207,7 +176,7 @@ const AddExpense = () => {
                   onChange={(e) => setCategory(e.target.value)}
                   icon={<CiGrid42 />}
                   label="Category"
-                  ref={inputRefs[0]}
+                  ref={inputRefs[3]}
                 />
                 <Input
                   width="sm:w-124 w-full"
@@ -218,7 +187,7 @@ const AddExpense = () => {
                   onChange={(e) => setDescription(e.target.value)}
                   icon={<CiFileOn />}
                   label="Description"
-                  ref={inputRefs[1]}
+                  ref={inputRefs[4]}
                 />
               </div>
             </div>
@@ -238,7 +207,7 @@ const AddExpense = () => {
                   onChange={(e) => setAmount(e.target.value)}
                   icon={<CiDollar />}
                   label="Amount"
-                  ref={inputRefs[2]}
+                  ref={inputRefs[5]}
                 />
                 <Input
                   width="sm:w-124 w-full"
@@ -249,7 +218,7 @@ const AddExpense = () => {
                   onChange={(e) => setPaymentMode(e.target.value)}
                   icon={<CiCreditCard1 />}
                   label="Payment Mode"
-                  ref={inputRefs[3]}
+                  ref={inputRefs[6]}
                 />
               </div>
             </div>
