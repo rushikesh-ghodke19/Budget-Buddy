@@ -1,20 +1,26 @@
-import { Resend } from "resend";
+import nodemailer from "nodemailer";
 
-// Initialize Resend with your API Key from Render Environment Variables
-const resend = new Resend(process.env.RESEND_API_KEY);
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASS,
+  },
+});
 
-export const sendVerificationOtp = async (email, subject, message) => {
+export const sendVerificationOTP = async (email, subject, message) => {
   try {
-    const data = await resend.emails.send({
-      from: process.env.SMTP_USER, // Use this for testing; verify your domain later for a custom email
+    const mailOptions = {
+      from: process.env.SMTP_USER,
       to: email,
       subject: subject,
       text: message,
-    });
-    return data;
+    };
+
+    const info = await transporter.sendMail(mailOptions);
+    return info; // success response
   } catch (error) {
-    console.error("Resend Error:", error);
-    throw error;
+    throw error; // let caller handle error
   }
 };
 

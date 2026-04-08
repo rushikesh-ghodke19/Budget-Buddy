@@ -1,7 +1,7 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import userModel from "../models/userModel.js";
-import { sendVerificationOtp, generateOTP } from "../config/sendEmail.js";
+import { generateOTP, sendVerificationOTP } from "../config/sendEmail.js";
 import axios from "axios";
 
 const generateToken = (userId) => {
@@ -48,25 +48,13 @@ export const userSignUp = async (req, res) => {
 
     await user.save();
 
-    try {
-      const emailResponse = await sendVerificationOtp(
-        email,
-        "Account Verification OTP",
-        `Your verification OTP is ${otp}. It will expire in ${EXPIRY_MINUTES} minutes.`,
-      );
+    const emailResponse = await sendVerificationOTP(
+      email,
+      "Account Verification OTP",
+      `Your verification OTP is ${otp}. It will expire in ${EXPIRY_MINUTES} minutes.`,
+    );
 
-      // Check if Resend returned an error (e.g., sending to an unverified email)
-      if (emailResponse.error) {
-        console.error("Resend API Error:", emailResponse.error);
-        return res.json({
-          success: false,
-          message: "Account created, but failed to send email.",
-        });
-      }
-    } catch (error) {
-      console.log("SMTP/API Error:", error);
-      return res.json({ success: false, message: "Error sending otp" });
-    }
+    console.log("Email sent:", emailResponse.messageId);
 
     console.log("SignUp Successful:\n" + user);
     return res.json({
@@ -217,25 +205,13 @@ export const sendResetPasswordOtp = async (req, res) => {
 
     await user.save();
 
-    try {
-      const emailResponse = await sendVerificationOtp(
-        email,
-        "Password Reset OTP",
-        `Your verification OTP is ${otp}. It will expire in ${EXPIRY_MINUTES} minutes.`,
-      );
+    const emailResponse = await sendVerificationOTP(
+      email,
+      "Password Reset OTP",
+      `Your verification OTP is ${otp}. It will expire in ${EXPIRY_MINUTES} minutes.`,
+    );
 
-      if (emailResponse.error) {
-        console.error("Resend API Error:", emailResponse.error);
-        return res.json({
-          success: false,
-          message: "Failed to send reset email.",
-        });
-      }
-
-      console.log("Email sent successfully");
-    } catch (error) {
-      return res.json({ success: false, message: error.message });
-    }
+    console.log("Email sent:", emailResponse.messageId);
 
     res.json({
       success: true,
