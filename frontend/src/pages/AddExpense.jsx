@@ -2,12 +2,12 @@ import { useContext, useEffect, useRef, useState } from "react";
 import Input from "../components/Input";
 import { Link } from "react-router-dom";
 import { validateAddExpense } from "../utils/addExpenseValidation";
+import Dropdown from "../components/Dropdown";
 
 import { CiGrid42 } from "react-icons/ci";
 import { CiFileOn } from "react-icons/ci";
 import { CiDollar } from "react-icons/ci";
 import { CiCreditCard1 } from "react-icons/ci";
-import { CiCalendarDate } from "react-icons/ci";
 import useToast from "../hooks/useToast";
 import { Data } from "../context/DataProvider";
 import useApi from "../hooks/useApi";
@@ -20,30 +20,58 @@ const AddExpense = () => {
   const userId = localStorage.getItem("userId");
 
   const date = new Date();
-  let currentYear = date.getFullYear();
-  let currentMonth = date.toLocaleString("en-us", { month: "long" });
-  let currentDate = date.getDate();
+  const currentDate = date.getDate();
 
-  const [selectedYear, setSelectedYear] = useState(null);
-  const [selectedMonth, setSelectedMonth] = useState(null);
-  const [selectedDay, setSelectedDay] = useState(null);
+  const [selectedYear, setSelectedYear] = useState(date.getFullYear());
+  const [selectedMonth, setSelectedMonth] = useState(
+    date.toLocaleString("en-us", { month: "long" }),
+  );
+  const [selectedDay, setSelectedDay] = useState(date.getDate());
 
   const [category, setCategory] = useState("");
   const [description, setDescription] = useState("");
   const [amount, setAmount] = useState("");
   const [paymentMode, setPaymentMode] = useState("");
 
+  const [activeDropdown, setActiveDropdown] = useState(null);
+
   const { callApi, loading } = useApi();
 
-  const inputRefs = [
-    useRef(null),
-    useRef(null),
-    useRef(null),
-    useRef(null),
-    useRef(null),
-    useRef(null),
-    useRef(null),
+  const inputRefs = [useRef(null), useRef(null), useRef(null), useRef(null)];
+
+  const years = Array.from({ length: 5 }, (_, i) => 2026 + i);
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
   ];
+  const wrapperRef = useRef(null);
+
+  const getDaysInMonth = (month, year) => {
+    if (!month || !year) return [];
+    const monthIndex = months.indexOf(month);
+    const days = new Date(year, monthIndex + 1, 0).getDate();
+    return Array.from({ length: days }, (_, i) => i + 1);
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (wrapperRef.current && !wrapperRef.current.contains(e.target)) {
+        setActiveDropdown(null);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const handleAddExpense = async (e) => {
     e.preventDefault();
@@ -61,23 +89,10 @@ const AddExpense = () => {
     if (validateInput) {
       showWarning("Validation Error", validateInput.message);
 
-      if (validateInput.field === "year") inputRefs[0].current.focus();
-      if (validateInput.field === "month") inputRefs[1].current.focus();
-      if (validateInput.field === "day") inputRefs[2].current.focus();
-      if (validateInput.field === "amount") inputRefs[5].current.focus();
-      if (validateInput.field === "paymentMode") inputRefs[6].current.focus();
+      if (validateInput.field === "amount") inputRefs[2].current.focus();
+      if (validateInput.field === "paymentMode") inputRefs[3].current.focus();
       return;
     }
-
-    console.log(
-      selectedYear,
-      selectedMonth,
-      selectedDay,
-      category,
-      description,
-      amount,
-      paymentMode,
-    );
 
     //? API Call
     const { data, error } = await callApi(
@@ -112,61 +127,68 @@ const AddExpense = () => {
   return (
     <>
       <div className="w-full h-screen pt-36 sm:pb-32 pb-24">
-        <div className="w-full h-full max-w-380 mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="py-4 border-b border-b-gray-200">
+        <div className="w-full h-full max-w-360 mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="py-4 border-b border-b-gray-200 flex sm:flex-row flex-col gap-2 justify-between">
             <h1 className="text-3xl text-budget-buddy-950 font-semibold tracking-wide">
               Add New Expense
             </h1>
+            <h1 className="flex items-center gap-2 text-2xl text-gray-700 font-semibold tracking-wide">
+              Today's Date:
+              <span className="font-medium">
+                {`${currentDate}${currentDate === 1 ? "st" : currentDate === 2 ? "nd" : currentDate === 3 ? "rd" : "th"} ${date.toLocaleString("en-us", { month: "long" })}, ${date.getFullYear()}`}
+              </span>
+            </h1>
           </div>
           <form className="w-full flex flex-col gap-8">
-            {/* Enter Date */}
-            <div className="w-full mt-8">
+            {/* Select Date */}
+            <div className="w-full mt-8 flex flex-col gap-4">
               <h1 className="text-2xl text-budget-buddy-950 font-semibold tracking-wide">
-                Enter Date
+                Select Date
               </h1>
-              <div className="w-full flex flex-col sm:flex-row items-start sm:items-center gap-6 sm:gap-8 pt-8">
-                <Input
-                  width="sm:w-124 w-full"
-                  type="text"
-                  placeholder={`Current Year "${currentYear}"`}
-                  value={selectedYear}
-                  name="Year"
-                  onChange={(e) => setSelectedYear(e.target.value)}
-                  icon={<CiCalendarDate />}
+              <div
+                ref={wrapperRef}
+                className="w-full flex flex-col sm:flex-row items-start sm:items-center gap-6 sm:gap-8"
+              >
+                <Dropdown
+                  width="w-full"
                   label="Year"
-                  ref={inputRefs[0]}
+                  data={years}
+                  selected={selectedYear}
+                  setSelected={setSelectedYear}
+                  type="year"
+                  activeDropdown={activeDropdown}
+                  setActiveDropdown={setActiveDropdown}
                 />
-                <Input
-                  width="sm:w-124 w-full"
-                  type="text"
-                  placeholder={`Current Month "${currentMonth}"`}
-                  value={selectedMonth}
-                  name="Month"
-                  onChange={(e) => setSelectedMonth(e.target.value)}
-                  icon={<CiCalendarDate />}
+                <Dropdown
+                  width="w-full"
                   label="Month"
-                  ref={inputRefs[1]}
+                  data={months}
+                  selected={selectedMonth}
+                  setSelected={setSelectedMonth}
+                  type="month"
+                  activeDropdown={activeDropdown}
+                  setActiveDropdown={setActiveDropdown}
                 />
-                <Input
-                  width="sm:w-124 w-full"
-                  type="number"
-                  placeholder={`Today's Date "${currentDate}"`}
-                  value={selectedDay}
-                  name="Date"
-                  onChange={(e) => setSelectedDay(e.target.value)}
-                  icon={<CiCalendarDate />}
-                  label="Date"
-                  ref={inputRefs[2]}
+                <Dropdown
+                  width="w-full"
+                  label="Day"
+                  data={getDaysInMonth(selectedMonth, selectedYear)}
+                  selected={selectedDay}
+                  setSelected={setSelectedDay}
+                  type="day"
+                  activeDropdown={activeDropdown}
+                  setActiveDropdown={setActiveDropdown}
+                  disabled={!selectedYear || !selectedMonth}
                 />
               </div>
             </div>
 
             {/* Enter Category & Description */}
-            <div className="w-full">
+            <div className="w-full flex flex-col gap-4">
               <h1 className="text-2xl font-semibold tracking-wide">
                 Enter Category & Description
               </h1>
-              <div className="w-full flex flex-col sm:flex-row items-start sm:items-center gap-6 sm:gap-8 pt-8">
+              <div className="w-full flex flex-col sm:flex-row items-start sm:items-center gap-6 sm:gap-8">
                 <Input
                   width="sm:w-124 w-full"
                   type="text"
@@ -176,7 +198,7 @@ const AddExpense = () => {
                   onChange={(e) => setCategory(e.target.value)}
                   icon={<CiGrid42 />}
                   label="Category"
-                  ref={inputRefs[3]}
+                  ref={inputRefs[0]}
                 />
                 <Input
                   width="sm:w-124 w-full"
@@ -187,17 +209,17 @@ const AddExpense = () => {
                   onChange={(e) => setDescription(e.target.value)}
                   icon={<CiFileOn />}
                   label="Description"
-                  ref={inputRefs[4]}
+                  ref={inputRefs[1]}
                 />
               </div>
             </div>
 
             {/* Enter Amount & Payment Mode */}
-            <div className="w-full">
+            <div className="w-full flex flex-col gap-4">
               <h1 className="text-2xl font-semibold tracking-wide">
                 Enter Amount & Payment Mode
               </h1>
-              <div className="w-full flex flex-col sm:flex-row items-start sm:items-center gap-6 sm:gap-8 pt-8">
+              <div className="w-full flex flex-col sm:flex-row items-start sm:items-center gap-6 sm:gap-8">
                 <Input
                   width="sm:w-124 w-full"
                   type="number"
@@ -207,7 +229,7 @@ const AddExpense = () => {
                   onChange={(e) => setAmount(e.target.value)}
                   icon={<CiDollar />}
                   label="Amount"
-                  ref={inputRefs[5]}
+                  ref={inputRefs[2]}
                 />
                 <Input
                   width="sm:w-124 w-full"
@@ -218,7 +240,7 @@ const AddExpense = () => {
                   onChange={(e) => setPaymentMode(e.target.value)}
                   icon={<CiCreditCard1 />}
                   label="Payment Mode"
-                  ref={inputRefs[6]}
+                  ref={inputRefs[3]}
                 />
               </div>
             </div>

@@ -8,8 +8,11 @@ import ExpensesTable from "../components/ExpensesTable";
 import Loading from "../components/Loading";
 
 const ViewExpenses = () => {
+  const date = new Date();
   const [selectedYear, setSelectedYear] = useState("2026");
-  const [selectedMonth, setSelectedMonth] = useState("January");
+  const [selectedMonth, setSelectedMonth] = useState(
+    date.toLocaleString("en-us", { month: "long" }),
+  );
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [expenses, setExpenses] = useState([]);
 

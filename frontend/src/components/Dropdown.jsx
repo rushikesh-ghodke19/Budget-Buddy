@@ -16,8 +16,11 @@ const Dropdown = ({
   return (
     <div className="relative w-full">
       <button
-        onClick={() => setActiveDropdown(isOpen ? null : type)}
-        className={`${width} h-20 px-4 rounded-2xl bg-white border border-gray-300 flex justify-between items-center text-xl font-medium tracking-wide disabled:cursor-not-allowed`}
+        onClick={(e) => {
+          setActiveDropdown(isOpen ? null : type);
+          e.stopPropagation()
+        }}
+        className={`${width} h-18 px-4 rounded-2xl bg-white border border-gray-300 flex justify-between items-center text-xl font-medium tracking-wide disabled:cursor-not-allowed`}
         disabled={disabled}
       >
         {selected ? selected : label}
