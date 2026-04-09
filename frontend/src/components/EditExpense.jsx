@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { IoCloseOutline } from "react-icons/io5";
 import Input from "./Input";
 import {
@@ -10,6 +10,9 @@ import {
 } from "react-icons/ci";
 import Loading from "./Loading";
 import useApi from "../hooks/useApi";
+import { API_PATHS, BASE_URL } from "../utils/apiPaths";
+import useToast from "../hooks/useToast";
+import { useNavigate } from "react-router-dom";
 
 const EditExpense = ({ editExpense, setIsEditExpense }) => {
   const [year, setYear] = useState("");
@@ -21,15 +24,49 @@ const EditExpense = ({ editExpense, setIsEditExpense }) => {
   const [amount, setAmount] = useState("");
   const [paymentMode, setPaymentMode] = useState("");
 
+  const navigate = useNavigate();
+
   const date = new Date();
   let currentYear = date.getFullYear();
   let currentMonth = date.toLocaleString("en-us", { month: "long" });
   let currentDate = date.getDate();
 
   const { callApi, loading } = useApi();
+  const { showWarning, showError, showSuccess } = useToast();
 
   const handleEditExpense = async () => {
-    console.log(year, month, day, category, description, amount, paymentMode);
+    const { data, error } = await callApi(
+      "post",
+      `${BASE_URL}${API_PATHS.EXPENSE.EDITEXPENSE}`,
+      {
+        expenseId: editExpense._id,
+        year,
+        month,
+        day,
+        category,
+        description,
+        amount,
+        paymentMode,
+      },
+    );
+
+    if (error) {
+      showError("SignUp Failed", error?.message || "Something went wrong.");
+      console.error("ERROR:", error);
+      return;
+    }
+
+    if (!data) return;
+
+    if (!data.success) {
+      showWarning("Warning", data.message);
+      return;
+    }
+
+    showSuccess("Succes", data.message);
+    setIsEditExpense(false);
+
+    navigate(0);
   };
 
   useEffect(() => {
@@ -46,10 +83,8 @@ const EditExpense = ({ editExpense, setIsEditExpense }) => {
   return (
     <div className="fixed inset-0 bg-black/20 lg:px-96 md:px-48 sm:px-24 px-12 z-50 flex items-center justify-center">
       <div className="bg-white sm:max-w-7xl w-full rounded-2xl max-h-[90vh] overflow-y-auto">
-        <div className="w-full px-12 py-6 flex items-center justify-between border-b border-b-gray-200">
-          <h1 className="text-[1.8rem] text-gray-700 font-medium">
-            Edit Expense
-          </h1>
+        <div className="w-full px-6 py-6 flex justify-between border-b border-b-gray-200">
+          <h1 className="text-2xl text-gray-700 font-bold">Edit Expense</h1>
           <button
             className="w-16 h-16 flex items-center justify-center bg-gray-100 hover:bg-gray-200 transition-all ease-in-out duration-300 rounded-2xl cursor-pointer"
             onClick={() => setIsEditExpense(false)}
@@ -61,8 +96,8 @@ const EditExpense = ({ editExpense, setIsEditExpense }) => {
           <Loading w="w-14" h="h-14" />
         ) : (
           <div className="w-full bg-gray-50">
-            <form className="w-full flex flex-col gap-6">
-              <div className="w-full px-12 mt-6 flex flex-col gap-4">
+            <form autoComplete="off" className="w-full flex flex-col gap-6">
+              <div className="w-full px-6 mt-6 flex flex-col gap-4">
                 <h1 className="text-2xl text-budget-buddy-950 font-semibold tracking-wide">
                   Edit Date
                 </h1>
@@ -100,7 +135,7 @@ const EditExpense = ({ editExpense, setIsEditExpense }) => {
                 </div>
               </div>
 
-              <div className="w-full px-12 flex flex-col gap-4">
+              <div className="w-full px-6 flex flex-col gap-4">
                 <h1 className="text-2xl font-semibold tracking-wide">
                   Edit Category & Description
                 </h1>
@@ -128,7 +163,7 @@ const EditExpense = ({ editExpense, setIsEditExpense }) => {
                 </div>
               </div>
 
-              <div className="w-full px-12 pb-6 flex flex-col gap-4 border-b border-b-gray-200">
+              <div className="w-full px-6 flex flex-col gap-4">
                 <h1 className="text-2xl font-semibold tracking-wide">
                   Edit Amount & Payment Mode
                 </h1>
@@ -156,10 +191,10 @@ const EditExpense = ({ editExpense, setIsEditExpense }) => {
                 </div>
               </div>
 
-              <div className="w-full bg-white px-12 mb-6 flex justify-end ">
+              <div className="w-full px-6 bg-white flex justify-end border-t border-t-gray-200">
                 <button
                   type="button"
-                  className="px-8 py-5 bg-budget-buddy-400/20 rounded-2xl text-budget-buddy-600 hover:text-white text-xl tracking-wide hover:bg-budget-buddy-600 transition-all ease-in-out cursor-pointer"
+                  className="px-8 py-5 my-6 bg-budget-buddy-400/20 rounded-2xl text-budget-buddy-600 hover:text-white text-xl tracking-wide hover:bg-budget-buddy-600 transition-all ease-in-out cursor-pointer"
                   onClick={handleEditExpense}
                 >
                   {loading ? (

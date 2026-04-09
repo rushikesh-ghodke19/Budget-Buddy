@@ -168,3 +168,71 @@ export const getStats = async (req, res) => {
     return res.json({ success: false, message: error.message });
   }
 };
+
+//? Edit Expense
+
+export const editExpense = async (req, res) => {
+  const {
+    expenseId,
+    year,
+    month,
+    day,
+    category,
+    description,
+    amount,
+    paymentMode,
+  } = req.body;
+
+  try {
+    const expense = await expenseModel.findById(expenseId);
+
+    if (!expense) {
+      return res.json({ success: false, message: "Expense not found" });
+    }
+
+    expense.year = year;
+    expense.month = month;
+    expense.day = day;
+    expense.category = category;
+    expense.description = description;
+    expense.amount = amount;
+    expense.paymentMode = paymentMode;
+
+    await expense.save();
+
+    return res.json({ success: true, message: "Expense edited successfully" });
+  } catch (error) {
+    console.log(error);
+    return res.json({ success: false, message: error.message });
+  }
+};
+
+//? Delete Expense
+
+export const deleteExpense = async (req, res) => {
+  const { expenseId } = req.body;
+
+  if (!expenseId)
+    return res.json({ success: false, message: "Expense Id Missing" });
+
+  try {
+    const expense = await expenseModel.findById(expenseId);
+
+    if (!expense)
+      return res.json({ success: false, message: "Expense not found" });
+
+    const deleteExpense = await expenseModel.deleteOne({ _id: expenseId });
+
+    if (!deleteExpense)
+      return res.json({ success: false, message: "Expense not deleted" });
+
+    res.json({
+      success: true,
+      message: "Expense deleted successfully",
+      deletedExpense: deleteExpense,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.json({ success: false, message: error.message });
+  }
+};

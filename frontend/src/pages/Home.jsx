@@ -23,6 +23,7 @@ const Home = () => {
   const { callApi, loading } = useApi();
 
   const handleGetStats = async () => {
+    console.log("Hey");
     const { data, error } = await callApi(
       "post",
       `${BASE_URL}${API_PATHS.EXPENSE.GETSTATS}`,

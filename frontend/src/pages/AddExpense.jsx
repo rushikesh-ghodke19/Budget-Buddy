@@ -3,7 +3,6 @@ import Input from "../components/Input";
 import { Link } from "react-router-dom";
 import { validateAddExpense } from "../utils/addExpenseValidation";
 import Dropdown from "../components/Dropdown";
-
 import { CiGrid42 } from "react-icons/ci";
 import { CiFileOn } from "react-icons/ci";
 import { CiDollar } from "react-icons/ci";

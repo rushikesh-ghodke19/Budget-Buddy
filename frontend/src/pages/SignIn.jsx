@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Input from "../components/Input";
 import { CiAt, CiLock } from "react-icons/ci";
@@ -138,7 +138,10 @@ const SignIn = () => {
                 <p className="sm:text-2xl text-xl text-budget-buddy-950 font-medium tracking-wide">
                   Forgot password?
                 </p>
-                <Link to="/auth/send-resetpassword-otp" className="sm:text-2xl text-xl rounded-2xl tracking-wide font-medium text-budget-buddy-600 transition-all duration-300 ease-in-out cursor-pointer">
+                <Link
+                  to="/auth/send-resetpassword-otp"
+                  className="sm:text-2xl text-xl rounded-2xl tracking-wide font-medium text-budget-buddy-600 transition-all duration-300 ease-in-out cursor-pointer"
+                >
                   Reset Now
                 </Link>
               </div>

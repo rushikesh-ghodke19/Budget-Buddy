@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Dropdown from "../components/Dropdown";
 import useApi from "../hooks/useApi";
 import useToast from "../hooks/useToast";

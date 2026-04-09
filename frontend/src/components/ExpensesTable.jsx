@@ -1,19 +1,15 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import EditExpense from "./EditExpense";
+import DeleteExpense from "./DeleteExpense";
 
 const ExpensesTable = ({ expenses, totalExpense }) => {
   const [isEditExpense, setIsEditExpense] = useState(false);
   const [expenseToEdit, setExpenseToEdit] = useState(null);
-  const navigate = useNavigate();
 
-  const handleSendDataToEdit = (data) => {
-    console.log(data);
+  const [isDeleteExpense, setIsDeleteExpense] = useState(false);
+  const [expenseToDelete, setExpenseToDelete] = useState(null);
 
-    navigate("/edit-expense", {
-      state: { data },
-    });
-  };
   return (
     <>
       <div className="w-full h-full rounded-2xl overflow-hidden bg-white flex flex-col">
@@ -102,7 +98,13 @@ const ExpensesTable = ({ expenses, totalExpense }) => {
                         >
                           Edit
                         </button>
-                        <button className="px-3 py-1 text-base bg-red-100 text-red-600 hover:bg-red-200 rounded-lg transition-all ease-in-out cursor-pointer">
+                        <button
+                          className="px-3 py-1 text-base bg-red-100 text-red-600 hover:bg-red-200 rounded-lg transition-all ease-in-out cursor-pointer"
+                          onClick={() => {
+                            setIsDeleteExpense(true);
+                            setExpenseToDelete(item);
+                          }}
+                        >
                           Delete
                         </button>
                       </div>
@@ -129,6 +131,12 @@ const ExpensesTable = ({ expenses, totalExpense }) => {
         <EditExpense
           editExpense={expenseToEdit}
           setIsEditExpense={setIsEditExpense}
+        />
+      ) : null}
+      {isDeleteExpense ? (
+        <DeleteExpense
+          deleteExpense={expenseToDelete}
+          setIsDeleteExpense={setIsDeleteExpense}
         />
       ) : null}
     </>
