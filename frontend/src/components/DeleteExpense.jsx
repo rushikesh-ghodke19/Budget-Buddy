@@ -46,7 +46,7 @@ const DeleteExpense = ({ deleteExpense, setIsDeleteExpense }) => {
   };
   return (
     <div className="fixed inset-0 bg-black/20 lg:px-96 md:px-48 sm:px-24 px-10 z-50 flex items-center justify-center">
-      <div className="sm:w-3xl w-full bg-white rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.15)]">
+      <div className="sm:w-4xl w-full bg-white rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.15)]">
         <div className="w-full px-6 py-6 flex justify-between border-b border-b-gray-200">
           <h1 className="text-2xl text-gray-700 font-semibold tracking-wide">
             Delete Expense
@@ -67,7 +67,7 @@ const DeleteExpense = ({ deleteExpense, setIsDeleteExpense }) => {
           <img src={questionMark} className="w-40" alt="question-mark" />
 
           <p className="text-2xl text-gray-500 font-medium text-center tracking-wide">
-            You want to delete expense for{" "}
+            You want to delete the expense for{" "}
             <span className="text-gray-700 font-bold">
               Category: {deleteExpense.category}
             </span>

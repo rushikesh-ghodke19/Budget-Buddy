@@ -69,12 +69,12 @@ const ExpensesTable = ({ expenses, totalExpense }) => {
 
                     <td className="px-6 py-4 border-r border-r-gray-200">
                       <span className="px-3 py-1 text-base text-nowrap font-medium bg-budget-buddy-100 text-budget-buddy-700 rounded-full">
-                        {item.category}
+                        {item.category ? item.category : "-"}
                       </span>
                     </td>
 
                     <td className="text-base text-nowrap px-6 py-4 border-r border-r-gray-200 text-gray-600">
-                      {item.description}
+                      {item.description ? item.description : "-"}
                     </td>
 
                     <td className="text-base px-6 py-4 border-r border-r-gray-200 font-semibold text-green-600">
@@ -116,7 +116,7 @@ const ExpensesTable = ({ expenses, totalExpense }) => {
           </table>
         </div>
         {/* Footer */}
-        <div className="w-full bg-blue-50 border-t border-t-gray-200">
+        <div className="w-full bg-blue-50">
           <div className="text-center font-semibold flex">
             <h1 className="px-6 py-4 text-xl text-gray-700">Total Expense</h1>
 
