@@ -95,38 +95,47 @@ const ViewExpenses = () => {
           className="w-full py-6 flex flex-col gap-3 border-b border-b-gray-200"
           ref={wrapperRef}
         >
-          <h1 className="text-2xl font-medium tracking-wide">Select Month</h1>
-          <div className="w-full flex flex-col md:flex-row items-start gap-4">
-            <ul className="w-full flex items-center gap-4 overflow-x-auto">
-              {months.map((item, index) => {
-                return (
-                  <li key={index}>
-                    <button
-                      className={`px-5 py-4 border border-gray-300 rounded-2xl text-[1.1rem] text-black tracking-wider hover:bg-budget-buddy-100 transition-all ease-in-out cursor-pointer ${
-                        selectedMonth === item ? "bg-budget-buddy-100" : ""
-                      }`}
-                      onClick={() => {
-                        setSelectedMonth(item);
-                      }}
-                    >
-                      {item}
-                    </button>
-                  </li>
-                );
-              })}
-            </ul>
+          <div className="w-full flex flex-col md:flex-row md:justify-between items-start gap-4">
+            <div className="w-full flex flex-col gap-2">
+              <h1 className="text-2xl font-medium tracking-wide">
+                Select Month
+              </h1>
+              <ul className="w-full flex items-center gap-4 overflow-x-auto">
+                {months.map((item, index) => {
+                  return (
+                    <li key={index}>
+                      <button
+                        className={`px-3 py-3 border border-gray-300 rounded-2xl text-[1.1rem] text-black tracking-wider hover:bg-budget-buddy-100 transition-all ease-in-out cursor-pointer ${
+                          selectedMonth === item ? "bg-budget-buddy-100" : ""
+                        }`}
+                        onClick={() => {
+                          setSelectedMonth(item);
+                        }}
+                      >
+                        {item}
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
 
-            <div className="sm:w-auto w-full">
-              <Dropdown
-                width="sm:w-90 w-full"
-                label="Year"
-                data={years}
-                selected={selectedYear}
-                setSelected={setSelectedYear}
-                type="year"
-                activeDropdown={activeDropdown}
-                setActiveDropdown={setActiveDropdown}
-              />
+            <div className="sm:w-90 w-full flex flex-col items-end gap-2">
+              <h1 className="text-2xl self-start font-medium tracking-wide">
+                Select Year
+              </h1>
+              <div className="sm:w-auto w-full">
+                <Dropdown
+                  width="sm:w-90 w-full"
+                  label="Year"
+                  data={years}
+                  selected={selectedYear}
+                  setSelected={setSelectedYear}
+                  type="year"
+                  activeDropdown={activeDropdown}
+                  setActiveDropdown={setActiveDropdown}
+                />
+              </div>
             </div>
           </div>
         </div>
