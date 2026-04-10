@@ -9,7 +9,7 @@ import Loading from "../components/Loading";
 
 const ViewExpenses = () => {
   const date = new Date();
-  const [selectedYear, setSelectedYear] = useState("2026");
+  const [selectedYear, setSelectedYear] = useState(date.getFullYear());
   const [selectedMonth, setSelectedMonth] = useState(
     date.toLocaleString("en-us", { month: "long" }),
   );

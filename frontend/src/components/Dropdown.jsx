@@ -18,7 +18,7 @@ const Dropdown = ({
       <button
         onClick={(e) => {
           setActiveDropdown(isOpen ? null : type);
-          e.stopPropagation()
+          e.stopPropagation();
         }}
         className={`${width} h-18 px-4 rounded-2xl bg-white border border-gray-300 flex justify-between items-center text-xl font-medium tracking-wide disabled:cursor-not-allowed`}
         disabled={disabled}
@@ -46,7 +46,7 @@ const Dropdown = ({
                 setSelected(item);
                 setActiveDropdown(null);
               }}
-              className={`p-4 text-xl text-budget-buddy-950 rounded-xl hover:bg-budget-buddy-100 cursor-pointer tracking-wide transition-all ease-in-out ${selected === item ? "bg-budget-buddy-100" : ""}`}
+              className={`p-4 text-xl text-budget-buddy-950 rounded-xl  cursor-pointer tracking-wide transition-all ease-in-out ${selected === item ? "bg-budget-buddy-100" : "hover:bg-budget-buddy-100"}`}
             >
               <input
                 type="radio"
