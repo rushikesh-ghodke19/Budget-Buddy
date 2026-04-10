@@ -113,10 +113,9 @@ const ExpensesTable = ({ expenses, totalExpense }) => {
                 );
               })}
             </tbody>
-
-            {/* Footer */}
           </table>
         </div>
+        {/* Footer */}
         <div className="w-full bg-blue-50 border-t border-t-gray-200">
           <div className="text-center font-semibold flex">
             <h1 className="px-6 py-4 text-xl text-gray-700">Total Expense</h1>

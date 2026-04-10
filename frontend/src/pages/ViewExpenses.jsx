@@ -102,8 +102,8 @@ const ViewExpenses = () => {
                 return (
                   <li key={index}>
                     <button
-                      className={`px-5 py-4 border border-gray-300 rounded-2xl text-[1.1rem] text-black tracking-wider hover:bg-gray-200 transition-all ease-in-out cursor-pointer ${
-                        selectedMonth === item ? "bg-gray-200" : ""
+                      className={`px-5 py-4 border border-gray-300 rounded-2xl text-[1.1rem] text-black tracking-wider hover:bg-budget-buddy-100 transition-all ease-in-out cursor-pointer ${
+                        selectedMonth === item ? "bg-budget-buddy-100" : ""
                       }`}
                       onClick={() => {
                         setSelectedMonth(item);
@@ -133,11 +133,11 @@ const ViewExpenses = () => {
 
         {/* Expenses */}
         {loading ? (
-          <div className="w-full mt-6 flex flex-col items-center justify-center border border-gray-300 rounded-2xl bg-white py-16 px-6 text-center">
+          <div className="w-full mt-6 flex flex-col items-center justify-center rounded-2xl bg-white py-16 px-6 text-center shadow-[0_10px_30px_rgba(0,0,0,0.08)]">
             <Loading w="w-14" h="h-14" />
           </div>
         ) : expenses.length === 0 ? (
-          <div className="w-full mt-6 flex flex-col items-center justify-center border border-dashed border-gray-300 rounded-2xl bg-white py-16 px-6 text-center">
+          <div className="w-full mt-6 flex flex-col items-center justify-center border border-dashed border-gray-300 rounded-2xl bg-white py-16 px-6 text-center shadow-[0_10px_30px_rgba(0,0,0,0.08)]">
             <div className="w-28 h-28 flex items-center justify-center rounded-full bg-budget-buddy-100 text-budget-buddy-600 text-6xl mb-6">
               💸
             </div>
@@ -166,7 +166,7 @@ const ViewExpenses = () => {
             </button>
           </div>
         ) : (
-          <div className="relative w-full mt-6 border border-gray-200 rounded-2xl overflow-hidden bg-white flex-1">
+          <div className="relative w-full mt-6 border border-gray-200 rounded-2xl overflow-hidden bg-white flex-1 shadow-[0_10px_30px_rgba(0,0,0,0.08)]">
             <ExpensesTable expenses={expenses} totalExpense={totalExpense} />
           </div>
         )}

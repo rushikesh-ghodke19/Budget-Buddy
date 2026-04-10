@@ -23,26 +23,18 @@ const Header = () => {
   const menu = [
     {
       title: "My Profile",
-      bgColor: "bg-gray-100",
-      color: "text-budget-buddy-600",
       navigation: "/",
     },
     {
       title: "Add Expense",
-      bgColor: "bg-gray-100",
-      color: "text-budget-buddy-600",
       navigation: "/add-expense",
     },
     {
       title: "View Expenses",
-      bgColor: "bg-gray-100",
-      color: "text-budget-buddy-600",
       navigation: "/view-expenses",
     },
     {
       title: "Logout",
-      bgColor: "bg-red-100",
-      color: "text-red-600",
       navigation: "",
     },
   ];
@@ -96,11 +88,14 @@ const Header = () => {
                   className={({ isActive }) =>
                     `w-full text-xl tracking-wide font-semibold px-6 py-5 rounded-xl transition-all ${
                       isActive
-                        ? `${item.bgColor} ${item.color}`
-                        : "text-gray-700 hover:bg-gray-100"
+                        ? `bg-budget-buddy-100 text-budget-buddy-600`
+                        : "text-gray-700 hover:bg-budget-buddy-100"
                     }`
                   }
-                  onClick={() => setIsMenuOpen(!isMenuOpen)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setIsMenuOpen(!isMenuOpen);
+                  }}
                 >
                   {item.title}
                 </NavLink>

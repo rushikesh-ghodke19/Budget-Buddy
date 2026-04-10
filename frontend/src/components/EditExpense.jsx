@@ -81,19 +81,21 @@ const EditExpense = ({ editExpense, setIsEditExpense }) => {
     }
   }, [editExpense]);
   return (
-    <div className="fixed inset-0 bg-black/20 lg:px-96 md:px-48 sm:px-24 px-12 z-50 flex items-center justify-center">
-      <div className="bg-white sm:max-w-7xl w-full rounded-2xl max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 bg-black/20 lg:px-96 md:px-48 sm:px-24 px-10 z-50 flex items-center justify-center">
+      <div className="bg-white sm:max-w-7xl w-full rounded-2xl max-h-[90vh] overflow-y-auto shadow-[0_10px_30px_rgba(0,0,0,0.15)]">
         <div className="w-full px-6 py-6 flex justify-between border-b border-b-gray-200">
           <h1 className="text-2xl text-gray-700 font-bold">Edit Expense</h1>
           <button
-            className="w-16 h-16 flex items-center justify-center bg-gray-100 hover:bg-gray-200 transition-all ease-in-out duration-300 rounded-2xl cursor-pointer"
+            className="w-16 h-16 flex items-center justify-center bg-budget-buddy-100 transition-all ease-in-out duration-300 rounded-2xl cursor-pointer"
             onClick={() => setIsEditExpense(false)}
           >
             <IoCloseOutline className="text-3xl" />
           </button>
         </div>
         {loading ? (
-          <Loading w="w-14" h="h-14" />
+          <div className="w-full h-full flex justify-center items-center py-16 px-6">
+            <Loading w="w-14" h="h-14" />
+          </div>
         ) : (
           <div className="w-full bg-gray-50">
             <form autoComplete="off" className="w-full flex flex-col gap-6">

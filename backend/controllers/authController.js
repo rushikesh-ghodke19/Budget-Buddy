@@ -72,6 +72,7 @@ export const userSignUp = async (req, res) => {
 
 export const userSignIn = async (req, res) => {
   const { email, password } = req.body;
+  const EXPIRY_MINUTES = 5;
 
   if (!email || !password) {
     console.log("Email and Password are required");
@@ -88,11 +89,30 @@ export const userSignIn = async (req, res) => {
       console.log("Invalid email");
       return res.json({ success: false, message: "Invalid email" });
     }
+
     if (!user.isAccountVerified) {
       console.log("Your account is not verified");
+
+      const otp = generateOTP();
+      const expireAt = new Date(Date.now() + EXPIRY_MINUTES * 60 * 1000);
+
+      user.verifyOtp = otp;
+      user.verifyOtpExpireAt = expireAt;
+
+      await user.save();
+
+      const emailResponse = await sendVerificationOTP(
+        email,
+        "Account Verification OTP",
+        `Your verification OTP is ${otp}. Verify your email using this Otp. It will expire in ${EXPIRY_MINUTES} minutes.`,
+      );
+
+      console.log("Email sent:", emailResponse.messageId);
+
       return res.json({
         success: false,
         message: "Your account is not verified",
+        userData: user,
       });
     }
 

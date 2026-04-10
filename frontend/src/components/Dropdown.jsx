@@ -38,7 +38,7 @@ const Dropdown = ({
             : "opacity-0 -translate-y-4 pointer-events-none"
         } z-10`}
       >
-        <ul className="h-80 bg-white overflow-y-auto flex flex-col gap-2">
+        <ul className="h-80 bg-white overflow-y-auto flex flex-col">
           {data.map((item, index) => (
             <li
               key={index}
@@ -46,7 +46,7 @@ const Dropdown = ({
                 setSelected(item);
                 setActiveDropdown(null);
               }}
-              className={`p-4 text-xl text-budget-buddy-950 rounded-xl hover:bg-budget-buddy-100 cursor-pointer tracking-wide ${selected === item ? "bg-budget-buddy-100" : ""}`}
+              className={`p-4 text-xl text-budget-buddy-950 rounded-xl hover:bg-budget-buddy-100 cursor-pointer tracking-wide transition-all ease-in-out ${selected === item ? "bg-budget-buddy-100" : ""}`}
             >
               <input
                 type="radio"

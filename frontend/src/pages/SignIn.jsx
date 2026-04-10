@@ -65,6 +65,20 @@ const SignIn = () => {
 
     if (!data) return;
 
+    if (data.message === "Your account is not verified") {
+      showInfo(
+        "Account not verified",
+        "Please veirfy your account before sign in",
+      );
+      localStorage.setItem("userId", data.userData._id);
+      localStorage.setItem("otpExpireAt", data.userData.verifyOtpExpireAt);
+      setTimeout(() => {
+        navigate(
+          `/auth/otp-verification?purpose=signup&email=${data.userData.email}`,
+        );
+      }, 1500);
+      return;
+    }
     if (!data.success) {
       showWarning("Warning", data.message);
       return;

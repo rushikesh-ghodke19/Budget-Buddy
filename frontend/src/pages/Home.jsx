@@ -95,9 +95,9 @@ const Home = () => {
       <h2 className="text-xl font-semibold text-gray-800 mb-4 mt-8">
         Recent Expenses
       </h2>
-      <div className="bg-white rounded-xl border border-gray-200 shadow-sm">
+      <div className="bg-white rounded-xl border border-gray-200 shadow-[0_10px_30px_rgba(0,0,0,0.08)]">
         {loading ? (
-          <div className="w-full flex flex-col items-center justify-center border border-gray-300 rounded-2xl bg-white py-16 px-6 text-center">
+          <div className="w-full flex flex-col items-center justify-center  rounded-2xl bg-white py-16 px-6 text-center">
             <Loading w="w-14" h="h-14" />
           </div>
         ) : recentExpenses.length === 0 ? (
