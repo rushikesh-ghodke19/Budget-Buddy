@@ -88,8 +88,8 @@ const Header = () => {
                   className={({ isActive }) =>
                     `w-full text-xl tracking-wide font-semibold px-6 py-5 rounded-xl transition-all ${
                       isActive
-                        ? `bg-budget-buddy-100 text-budget-buddy-600`
-                        : "text-gray-700 hover:bg-budget-buddy-100"
+                        ? `bg-budget-buddy-50 text-budget-buddy-600`
+                        : "text-gray-700 hover:bg-budget-buddy-50 hover:text-budget-buddy-600"
                     }`
                   }
                   onClick={(e) => {

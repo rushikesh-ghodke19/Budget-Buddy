@@ -176,7 +176,12 @@ const ViewExpenses = () => {
           </div>
         ) : (
           <div className="relative w-full mt-6 border border-gray-200 rounded-2xl overflow-hidden bg-white flex-1 shadow-[0_10px_30px_rgba(0,0,0,0.08)]">
-            <ExpensesTable expenses={expenses} totalExpense={totalExpense} />
+            <ExpensesTable
+              expenses={expenses}
+              totalExpense={totalExpense}
+              selectedMonth={selectedMonth}
+              selectedYear={selectedYear}
+            />
           </div>
         )}
       </div>

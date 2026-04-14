@@ -19,5 +19,6 @@ export const API_PATHS = {
     GETSTATS: "/api/expenses/get-stats",
     EDITEXPENSE: "/api/expenses/edit-expense",
     DELETEEXPENSE: "/api/expenses/delete-expense",
+    DOWNLOADREPORT: "/api/expenses/download-report",
   },
 };

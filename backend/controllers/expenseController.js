@@ -1,5 +1,6 @@
 import expenseModel from "../models/expenseModel.js";
 import userModel from "../models/userModel.js";
+import exceljs from "exceljs";
 
 //? Add Expense
 export const addExpense = async (req, res) => {
@@ -234,5 +235,85 @@ export const deleteExpense = async (req, res) => {
   } catch (error) {
     console.log(error);
     return res.json({ success: false, message: error.message });
+  }
+};
+
+//? Download Expenses in Excel File
+
+export const downloadExpenseReport = async (req, res) => {
+  const { month, year, userId } = req.body;
+
+  if (!month || !year) {
+    console.log("Month or Year is Missing");
+    return res.json({ success: false, message: "Missing month or year" });
+  }
+
+  try {
+    const expenses = await expenseModel.find({ month, year, user_id: userId });
+
+    if (expenses.length === 0) {
+      console.log(`There are no expenses for ${month} and ${year}`);
+      res.json({
+        success: false,
+        message: `There are no expenses for ${month} and ${year}`,
+      });
+      return;
+    }
+
+    const workbook = new exceljs.Workbook();
+    const worksheet = workbook.addWorksheet(`${month}`);
+
+    worksheet.columns = [
+      { header: "Sr.No.", key: "srno", width: 15 },
+      { header: "Date", key: "date", width: 15 },
+      { header: "Category", key: "category", width: 40 },
+      { header: "Description", key: "description", width: 70 },
+      { header: "Amount", key: "amount", width: 15 },
+      { header: "Payment Mode", key: "paymentMode", width: 15 },
+    ];
+
+    const monthMap = {
+      January: 0,
+      February: 1,
+      March: 2,
+      April: 3,
+      May: 4,
+      June: 5,
+      July: 6,
+      August: 7,
+      September: 8,
+      October: 9,
+      November: 10,
+      December: 11,
+    };
+
+    expenses.forEach((expense, index) => {
+      const formattedDate = new Date(
+        Number(expense.year),
+        monthMap[expense.month],
+        Number(expense.day),
+      ).toLocaleDateString("en-IN");
+
+      worksheet.addRow({
+        srno: index + 1,
+        date: formattedDate,
+        category: expense.category,
+        description: expense.description,
+        amount: expense.amount,
+        paymentMode: expense.paymentMode,
+      });
+    });
+
+    res.setHeader(
+      "Content-Type",
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    );
+    res.setHeader("Content-Disposition", `attachment; filename=${month}.xlsx`);
+
+    await workbook.xlsx.write(res);
+    return res.end();
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send("Error generating report: " + error.message);
   }
 };

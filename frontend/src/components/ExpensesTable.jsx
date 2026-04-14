@@ -1,14 +1,65 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import EditExpense from "./EditExpense";
 import DeleteExpense from "./DeleteExpense";
+import useApi from "../hooks/useApi";
+import { API_PATHS, BASE_URL } from "../utils/apiPaths";
+import useToast from "../hooks/useToast";
+import axios from "axios";
 
-const ExpensesTable = ({ expenses, totalExpense }) => {
+const ExpensesTable = ({
+  expenses,
+  totalExpense,
+  selectedMonth,
+  selectedYear,
+}) => {
+  const userId = localStorage.getItem("userId");
   const [isEditExpense, setIsEditExpense] = useState(false);
   const [expenseToEdit, setExpenseToEdit] = useState(null);
 
   const [isDeleteExpense, setIsDeleteExpense] = useState(false);
   const [expenseToDelete, setExpenseToDelete] = useState(null);
+
+  const location = useLocation();
+
+  const { showError, showSuccess } = useToast();
+
+  const handleDownloadReport = async () => {
+    try {
+      const response = await axios.post(
+        `${BASE_URL}${API_PATHS.EXPENSE.DOWNLOADREPORT}`,
+        {
+          month: selectedMonth,
+          year: selectedYear,
+          userId,
+        },
+        {
+          responseType: "blob", // ✅ VERY IMPORTANT
+        },
+      );
+
+      // ✅ Create downloadable file
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute(
+        "download",
+        `Expense_Report_${selectedMonth}_${selectedYear}.xlsx`,
+      );
+
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+
+      showSuccess(
+        "Success",
+        `Report for ${selectedMonth} ${selectedYear} downloaded successfully`,
+      );
+    } catch (error) {
+      console.error("ERROR:", error);
+      showError("Download Failed", "Something went wrong");
+    }
+  };
 
   return (
     <>
@@ -116,14 +167,26 @@ const ExpensesTable = ({ expenses, totalExpense }) => {
           </table>
         </div>
         {/* Footer */}
-        <div className="w-full bg-blue-50">
-          <div className="text-center font-semibold flex">
-            <h1 className="px-6 py-4 text-xl text-gray-700">Total Expense</h1>
+        <div className="w-full bg-blue-50 flex justify-between items-center px-6 py-4">
+          <div className="text-center font-semibold flex gap-8">
+            <h1 className="text-xl text-gray-700">Total Expense</h1>
 
-            <h1 className="px-6 py-4 text-green-600 text-xl font-bold">
+            <h1 className="text-green-600 text-xl font-bold">
               ₹{totalExpense}
             </h1>
           </div>
+
+          {location.pathname === "/view-expenses" ? (
+            <div>
+              <button
+                type="button"
+                className="sm:px-6 px-4 sm:py-4 py-3 text-white text-lg font-semibold tracking-wide bg-budget-buddy-700 rounded-2xl hover:bg-budget-buddy-600 cursor-pointer transition-all ease-in-out"
+                onClick={handleDownloadReport}
+              >
+                Download
+              </button>
+            </div>
+          ) : null}
         </div>
       </div>
       {isEditExpense ? (
