@@ -191,7 +191,7 @@ const ExpensesTable = ({
               >
                 {loading ? (
                   <div className="flex items-center gap-4">
-                    <Loading w="w-8" h="h-8" />
+                    <Loading w="w-6" h="h-6" />
                     Downloading
                   </div>
                 ) : (
