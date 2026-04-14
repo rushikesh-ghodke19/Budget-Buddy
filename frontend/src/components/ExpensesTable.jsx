@@ -6,6 +6,7 @@ import useApi from "../hooks/useApi";
 import { API_PATHS, BASE_URL } from "../utils/apiPaths";
 import useToast from "../hooks/useToast";
 import axios from "axios";
+import Loading from "./Loading";
 
 const ExpensesTable = ({
   expenses,
@@ -14,6 +15,7 @@ const ExpensesTable = ({
   selectedYear,
 }) => {
   const userId = localStorage.getItem("userId");
+  const [loading, setLoading] = useState(false);
   const [isEditExpense, setIsEditExpense] = useState(false);
   const [expenseToEdit, setExpenseToEdit] = useState(null);
 
@@ -25,6 +27,7 @@ const ExpensesTable = ({
   const { showError, showSuccess } = useToast();
 
   const handleDownloadReport = async () => {
+    setLoading(true);
     try {
       const response = await axios.post(
         `${BASE_URL}${API_PATHS.EXPENSE.DOWNLOADREPORT}`,
@@ -58,6 +61,9 @@ const ExpensesTable = ({
     } catch (error) {
       console.error("ERROR:", error);
       showError("Download Failed", "Something went wrong");
+      setLoading(false);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -183,7 +189,14 @@ const ExpensesTable = ({
                 className="sm:px-6 px-4 sm:py-4 py-3 text-white text-lg font-semibold tracking-wide bg-budget-buddy-700 rounded-2xl hover:bg-budget-buddy-600 cursor-pointer transition-all ease-in-out"
                 onClick={handleDownloadReport}
               >
-                Download
+                {loading ? (
+                  <div className="flex items-center gap-4">
+                    <Loading w="w-8" h="h-8" />
+                    Downloading
+                  </div>
+                ) : (
+                  "Download"
+                )}
               </button>
             </div>
           ) : null}
