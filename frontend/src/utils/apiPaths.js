@@ -12,6 +12,8 @@ export const API_PATHS = {
   },
   USER: {
     GETUSERDATA: "/api/user/userdata",
+    UPLOADUSERIMAGE: "/api/user/upload-user-image",
+    DELETEUSERIMAGE: "/api/user/delete-user-image",
   },
   EXPENSE: {
     ADDEXPENSE: "/api/expenses/add-expense",

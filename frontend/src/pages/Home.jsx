@@ -10,6 +10,7 @@ import { IoAdd, IoCloseOutline } from "react-icons/io5";
 import { CiViewTimeline } from "react-icons/ci";
 import { CiEdit } from "react-icons/ci";
 import { CiSettings } from "react-icons/ci";
+import UserImage from "../components/UserImage";
 
 const Home = () => {
   const { user, setIsUserLoggedIn } = useContext(Data);
@@ -77,13 +78,7 @@ const Home = () => {
               <div className="w-full h-full flex flex-col gap-8 relative">
                 {/* User's Image and Name */}
                 <div className="w-full flex flex-col items-center gap-6">
-                  <div className="w-56 h-56 bg-gray-100 rounded-full">
-                    <img
-                      src={userImg}
-                      className="w-full h-full object-cover rounded-full"
-                      alt="user_image"
-                    />
-                  </div>
+                  <UserImage w="w-56" h="h-56" />
                   <h1 className="text-3xl text-gray-800">
                     {user?.firstname} {user?.lastname}
                   </h1>
