@@ -98,7 +98,7 @@ const OtpVerification = () => {
             localStorage.setItem("userLoggedIn", "true");
             localStorage.setItem("token", data.token);
             localStorage.removeItem("otpExpireAt");
-            navigate("/");
+            navigate("/profile");
             return;
           }
           if (purpose === "send-resetpassword-otp") {

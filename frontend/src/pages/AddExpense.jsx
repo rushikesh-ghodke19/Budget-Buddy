@@ -125,8 +125,8 @@ const AddExpense = () => {
 
   return (
     <>
-      <div className="w-full h-screen pt-36 sm:pb-32 pb-24">
-        <div className="w-full h-full max-w-360 mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="w-full">
+        <div className="w-full h-full px-4 sm:px-6 lg:px-8">
           <div className="py-4 border-b border-b-gray-200 flex sm:flex-row flex-col gap-2 justify-between">
             <h1 className="text-3xl text-budget-buddy-950 font-semibold tracking-wide">
               Add New Expense

@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import EditExpense from "./EditExpense";
 import DeleteExpense from "./DeleteExpense";
-import useApi from "../hooks/useApi";
 import { API_PATHS, BASE_URL } from "../utils/apiPaths";
 import useToast from "../hooks/useToast";
 import axios from "axios";
@@ -69,11 +68,11 @@ const ExpensesTable = ({
 
   return (
     <>
-      <div className="w-full h-full rounded-2xl overflow-hidden bg-white flex flex-col">
+      <div className="w-full h-full rounded-2xl bg-white flex flex-col">
         <div className="flex-1 overflow-y-auto">
           <table className="w-full text-sm text-left">
             {/* Header */}
-            <thead className="sticky top-0 left-0 bg-blue-50 border-b border-b-gray-200">
+            <thead className="sticky top-0 bg-blue-50 border-b border-b-gray-200">
               <tr className="text-gray-600 uppercase tracking-wider text-center">
                 <th className="text-base px-6 py-4 border-r border-r-gray-200">
                   #
@@ -182,7 +181,7 @@ const ExpensesTable = ({
             </h1>
           </div>
 
-          {location.pathname === "/view-expenses" ? (
+          {location.pathname === "/profile/view-expenses" ? (
             <div>
               <button
                 type="button"

@@ -62,7 +62,7 @@ const SignUp = () => {
   };
 
   return (
-    <div className="w-full h-screen bg-[radial-gradient(circle_at_center,rgba(5,223,114,0.05)_10%,rgba(254,243,198,0.1)_65%)] lg:px-72 md:px-48 sm:px-24 px-12 py-24">
+    <div className="w-full h-screen bg-[radial-gradient(circle_at_center,rgba(5,223,114,0.05)_10%,rgba(254,243,198,0.1)_65%)] lg:px-72 md:px-48 sm:px-24 px-12">
       <div className="w-full h-full lg:px-72 flex flex-col justify-center gap-28">
         <div className="w-full flex flex-col sm:gap-20 gap-14">
           <div className="w-full flex justify-end">

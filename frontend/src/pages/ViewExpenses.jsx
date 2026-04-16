@@ -81,11 +81,11 @@ const ViewExpenses = () => {
     handleViewExpenses();
   }, [selectedYear, selectedMonth]);
   return (
-    <div className="w-full h-screen pt-36 pb-12 overflow-hidden flex flex-col">
-      <div className="w-full h-full lg:px-60 md:px-36 sm:px-32 px-10 flex flex-col">
+    <div className="w-full h-full min-h-0 flex flex-col">
+      <div className="w-full flex flex-col flex-1 min-h-0">
         {/* Header */}
-        <div className="py-4 border-b border-b-gray-200">
-          <h1 className="text-3xl font-semibold tracking-wide">
+        <div className="border-b border-b-gray-200">
+          <h1 className="text-3xl font-semibold tracking-wide pb-4">
             Monthly Expenses
           </h1>
         </div>
@@ -142,7 +142,7 @@ const ViewExpenses = () => {
 
         {/* Expenses */}
         {loading ? (
-          <div className="w-full mt-6 flex flex-col items-center justify-center rounded-2xl bg-white py-16 px-6 text-center shadow-[0_10px_30px_rgba(0,0,0,0.08)]">
+          <div className="mt-6 flex justify-center items-center">
             <Loading w="w-14" h="h-14" />
           </div>
         ) : expenses.length === 0 ? (
@@ -175,13 +175,15 @@ const ViewExpenses = () => {
             </button>
           </div>
         ) : (
-          <div className="relative w-full mt-6 border border-gray-200 rounded-2xl overflow-hidden bg-white flex-1 shadow-[0_10px_30px_rgba(0,0,0,0.08)]">
-            <ExpensesTable
-              expenses={expenses}
-              totalExpense={totalExpense}
-              selectedMonth={selectedMonth}
-              selectedYear={selectedYear}
-            />
+          <div className="flex-1 min-h-0 mt-6">
+            <div className="w-full h-full rounded-2xl overflow-hidden bg-white shadow flex flex-col">
+              <ExpensesTable
+                expenses={expenses}
+                totalExpense={totalExpense}
+                selectedMonth={selectedMonth}
+                selectedYear={selectedYear}
+              />
+            </div>
           </div>
         )}
       </div>

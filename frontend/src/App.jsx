@@ -10,6 +10,9 @@ import { Data } from "./context/DataProvider";
 import Home from "./pages/Home";
 import SendResetPasswordOtp from "./pages/SendResetPasswordOtp";
 import ResetPassword from "./pages/ResetPassword";
+import Profile from "./pages/Profile";
+import EditProfile from "./pages/EditProfile";
+import Settings from "./pages/Settings";
 
 function App() {
   const { isUserLoggedIn } = useContext(Data);
@@ -17,29 +20,27 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Layout />}>
+          <Route
+            path="/"
+            element={
+              isUserLoggedIn ? (
+                <Navigate to="/profile" />
+              ) : (
+                <Navigate to="/auth/signin" />
+              )
+            }
+          />
+          <Route path="/auth" element={<Layout />}>
             <Route
-              path=""
-              element={
-                isUserLoggedIn ? <Home /> : <Navigate to="/auth/signin" />
-              }
-            />
-            <Route
-              path="/add-expense"
-              element={
-                isUserLoggedIn ? <AddExpense /> : <Navigate to="/auth/signin" />
-              }
-            />
-            <Route
-              path="/auth/signin"
+              path="signin"
               element={!isUserLoggedIn ? <SignIn /> : <Navigate to="/" />}
             />
             <Route
-              path="/auth/signup"
+              path="signup"
               element={!isUserLoggedIn ? <SignUp /> : <Navigate to="/" />}
             />
             <Route
-              path="/auth/otp-verification"
+              path="otp-verification"
               element={
                 !isUserLoggedIn ? (
                   <OtpVerification />
@@ -49,18 +50,46 @@ function App() {
               }
             />
             <Route
-              path="/auth/send-resetpassword-otp"
+              path="send-resetpassword-otp"
               element={<SendResetPasswordOtp />}
             />
-            <Route path="/auth/reset-password" element={<ResetPassword />} />
+            <Route path="reset-password" element={<ResetPassword />} />
+          </Route>
+          <Route
+            path="/profile"
+            element={isUserLoggedIn ? <Home /> : <Navigate to="/auth/signin" />}
+          >
+            <Route index element={<Profile />} />
             <Route
-              path="/view-expenses"
+              path="add-expense"
+              element={
+                isUserLoggedIn ? <AddExpense /> : <Navigate to="/auth/signin" />
+              }
+            />
+            <Route
+              path="view-expenses"
               element={
                 isUserLoggedIn ? (
                   <ViewExpenses />
                 ) : (
                   <Navigate to="/auth/signin" />
                 )
+              }
+            />
+            <Route
+              path="edit-profile"
+              element={
+                isUserLoggedIn ? (
+                  <EditProfile />
+                ) : (
+                  <Navigate to="/auth/signin" />
+                )
+              }
+            />
+            <Route
+              path="settings"
+              element={
+                isUserLoggedIn ? <Settings /> : <Navigate to="/auth/signin" />
               }
             />
           </Route>

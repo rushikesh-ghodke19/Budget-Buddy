@@ -86,7 +86,7 @@ const EditExpense = ({ editExpense, setIsEditExpense }) => {
         <div className="w-full px-6 py-6 flex justify-between border-b border-b-gray-200">
           <h1 className="text-2xl text-gray-700 font-bold">Edit Expense</h1>
           <button
-            className="w-16 h-16 flex items-center justify-center bg-budget-buddy-100 transition-all ease-in-out duration-300 rounded-2xl cursor-pointer"
+            className="w-16 h-16 flex items-center justify-center bg-gray-100 transition-all ease-in-out duration-300 rounded-2xl cursor-pointer"
             onClick={() => setIsEditExpense(false)}
           >
             <IoCloseOutline className="text-3xl" />

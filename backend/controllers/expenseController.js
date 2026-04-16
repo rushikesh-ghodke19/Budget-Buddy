@@ -141,7 +141,7 @@ export const getStats = async (req, res) => {
       return b.day - a.day;
     });
 
-    const recentExpenses = sortedExpenses.slice(0, 5);
+    const recentExpenses = sortedExpenses.slice(0, 10);
 
     const totalExpenses = allExpenses.reduce(
       (acc, curElem) => acc + curElem.amount,
