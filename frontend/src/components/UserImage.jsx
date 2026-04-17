@@ -108,18 +108,12 @@ const UserImage = ({ w, h, showActions = false }) => {
               name="user_image"
               id="user_image"
               hidden
-              onChange={(e) => {
-                handleUploadUserImage();
-                e.stopPropagation();
-              }}
+              onChange={handleUploadUserImage}
             />
             {user?.profileImage ? (
               <button
                 className="px-6 py-4 bg-red-400/20 rounded-2xl text-red-600 font-semibold hover:text-white sm:text-xl text-lg tracking-wide hover:bg-red-600 transition-all ease-in-out cursor-pointer flex items-center gap-2"
-                onClick={(e) => {
-                  handleDeleteUserImage();
-                  e.stopPropagation();
-                }}
+                onClick={handleDeleteUserImage}
               >
                 {loading ? (
                   <div className="flex items-center gap-4">
