@@ -64,7 +64,7 @@ const Home = () => {
         <div className="w-full h-full pt-28 flex justify-between">
           {/* Left Side */}
           <div
-            className={`md:static absolute top-0 ${isMenuOpen ? "left-0" : "-left-full"} md:block md:w-1/5 sm:w-[40%] w-full h-full bg-white transition-all duration-500 ease-in-out z-50`}
+            className={`md:static absolute top-0 ${isMenuOpen ? "left-0" : "-left-full"} md:block md:w-1/5 sm:w-[40%] w-full md:h-full h-screen bg-white transition-all duration-500 ease-in-out z-50`}
           >
             <div className="absolute right-8 top-8 md:hidden block z-50">
               <button

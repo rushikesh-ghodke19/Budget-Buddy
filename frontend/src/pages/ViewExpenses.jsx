@@ -169,7 +169,7 @@ const ViewExpenses = () => {
 
             <button
               className="mt-6 px-6 py-3 rounded-xl bg-budget-buddy-600 text-xl text-white hover:bg-budget-buddy-700 transition cursor-pointer"
-              onClick={() => navigate("/add-expense")}
+              onClick={() => navigate("/profile/add-expense")}
             >
               + Add Expense
             </button>
