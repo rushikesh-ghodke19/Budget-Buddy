@@ -85,7 +85,7 @@ const ViewExpenses = () => {
       <div className="w-full flex flex-col flex-1 min-h-0">
         {/* Header */}
         <div className="border-b border-b-gray-200">
-          <h1 className="text-3xl font-semibold tracking-wide pb-4">
+          <h1 className="text-3xl text-gray-800 font-semibold tracking-wide pb-4">
             Monthly Expenses
           </h1>
         </div>
@@ -97,7 +97,7 @@ const ViewExpenses = () => {
         >
           <div className="w-full flex flex-col md:flex-row md:justify-between items-start gap-4">
             <div className="w-full flex flex-col gap-2">
-              <h1 className="text-2xl font-medium tracking-wide">
+              <h1 className="text-2xl text-gray-800 font-medium tracking-wide">
                 Select Month
               </h1>
               <ul className="w-full flex items-center gap-4 overflow-x-auto">
@@ -105,8 +105,8 @@ const ViewExpenses = () => {
                   return (
                     <li key={index}>
                       <button
-                        className={`px-3 py-3 border border-gray-300 rounded-2xl text-[1.1rem] text-black tracking-wider hover:bg-budget-buddy-100 transition-all ease-in-out cursor-pointer ${
-                          selectedMonth === item ? "bg-budget-buddy-100" : ""
+                        className={`px-3 py-3 border border-gray-300 rounded-2xl text-[1.1rem]  tracking-wider hover:bg-budget-buddy-100 transition-all ease-in-out cursor-pointer ${
+                          selectedMonth === item ? "bg-budget-buddy-50 text-budget-buddy-700" : "text-gray-700"
                         }`}
                         onClick={() => {
                           setSelectedMonth(item);
@@ -121,7 +121,7 @@ const ViewExpenses = () => {
             </div>
 
             <div className="sm:w-90 w-full flex flex-col items-end gap-2">
-              <h1 className="text-2xl self-start font-medium tracking-wide">
+              <h1 className="text-2xl text-gray-800 self-start font-medium tracking-wide">
                 Select Year
               </h1>
               <div className="sm:w-auto w-full">
